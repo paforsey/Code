@@ -13,39 +13,74 @@ This report explores the NOAA Storm Events Database in an attempt to determine w
 
 
 ##Load Libraries
-```{r}
-library(ggplot2);
-library(downloader);
-library(R.utils);
+```{r Libraries, eval=T, echo=T}
+suppressWarnings(library(ggplot2));
+suppressWarnings(library(dplyr));
+suppressWarnings(library(plyr));
+suppressWarnings(library(downloader));
+suppressWarnings(library(R.utils));
+suppressWarnings(library(googleVis));
 ```
 
 
 ##Download & Uncompress Dataset
-```{r eval=F}
-setwd("~/Coursera/05 Reproducible Research");
+```{r DownloadData, eval=F, echo=T}
 
-csv <- "https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2FStormData.csv.bz2";
-download(csv, "repdata-data-StormData.csv.bz2", mode="wb");
-bunzip2("repdata-data-StormData.csv.bz2", "StormData.csv");
+    knitr::opts_chunk$set(cache=T)
+
+    setwd("~/Data Science/05 Reproducible Research");
+    
+    csv <- "https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2FStormData.csv.bz2";
+    download(csv, "repdata-data-StormData.csv.bz2", mode="wb");
+    bunzip2("repdata-data-StormData.csv.bz2", "StormData.csv");
 
 ```
 
-##Read CSV File
-```{r eval=F, cache=T}
-    StormData <- suppressWarnings(read.csv("StormData.csv"));
-    dim(StormData);
+##Read CSV File & Process Data
+```{r ReadProcessCSV, include=F, eval=T, echo=T, cache=T}
+
+    NOAA_Full <- suppressWarnings(read.csv("StormData.csv", na.strings=""));
+    dim(NOAA_Full);
     
-    Storm <- StormData[, c("COUNTYNAME", "STATE", "EVTYPE", "FATALITIES",
-        "INJURIES", "PROPDMG", "PROPDMGEXP", "CROPDMG", "CROPDMGEXP")];
-    
+    StateNames <- suppressWarnings(read.csv("states.csv"));
+    dim(StateNames);
+
+    StormDataFull <- merge(x=NOAA_Full, y=StateNames, by="STATE", all.x=T);
+
+    StormDataFull$PROP_SCALE[StormDataFull$PROPDMGEXP=="M"] <- 1000000;
+    StormDataFull$PROP_SCALE[StormDataFull$PROPDMGEXP=="K"] <- 1000;
+    StormDataFull$PROP_SCALE[is.na(StormDataFull$PROPDMGEXP)==T] <- 1;
+
+    StormDataFull$CROP_SCALE[StormDataFull$CROPDMGEXP=="M"] <- 1000000;
+    StormDataFull$CROP_SCALE[StormDataFull$CROPDMGEXP=="K"] <- 1000;
+    StormDataFull$CROP_SCALE[is.na(StormDataFull$CROPDMGEXP)==T] <- 1;
+
+    StormDataFull$ECONOMIC <- (StormDataFull$PROPDMG * StormDataFull$PROP_SCALE) + 
+        (StormDataFull$CROPDMG * StormDataFull$CROP_SCALE);
+    StormDataFull$HEALTH <- StormDataFull$INJURIES + StormDataFull$FATALITIES;
+
+    StormData <- StormDataFull[, c("STATE_NAME", "EVTYPE", "ECONOMIC", "HEALTH")];
+
+    StormData_ECONOMIC <- ddply(StormData, "STATE_NAME", summarise, ECONOMIC=sum(ECONOMIC));
+    StormData_HEALTH <- ddply(StormData, "STATE_NAME", summarise, HEALTH=sum(HEALTH));
+
 ```
 
 
-## Property Damage
+## Economic Impact
+
+```{r PropertyDamageChart, results='asis', tidy=F}
+    Geo <- gvisGeoMap(StormData_ECONOMIC, locationvar='STATE_NAME', numvar='ECONOMIC', 
+        options=list(region='US', colors='[0xFF8747, 0xFFB581, 0xc06000]', 
+        dataMode='regions', height=350, width=600));
+    plot(Geo);
+
+```
 
 
 ## Population Health
+```{r}
 
 
-
+```
 
