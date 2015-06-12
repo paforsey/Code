@@ -1,0 +1,51 @@
+---
+title: "Severe Weather Events Analysis"
+author: "Philip A. Forsey"
+date: "June 11, 2015"
+output: html_document
+---
+
+#Synopsis
+
+This report explores the NOAA Storm Events Database in an attempt to determine which types of severe weather events are most harmful in terms of not only property damage, buth population health as well.  The purpose of this report is to provide government or municipal manager(s) with a resource that helps them make informed decisions as it pertains to effectively allocating limited resources.
+
+[Findings...]
+
+
+##Load Libraries
+```{r}
+library(ggplot2);
+library(downloader);
+library(R.utils);
+```
+
+
+##Download & Uncompress Dataset
+```{r eval=F}
+setwd("~/Coursera/05 Reproducible Research");
+
+csv <- "https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2FStormData.csv.bz2";
+download(csv, "repdata-data-StormData.csv.bz2", mode="wb");
+bunzip2("repdata-data-StormData.csv.bz2", "StormData.csv");
+
+```
+
+##Read CSV File
+```{r eval=F, cache=T}
+    StormData <- suppressWarnings(read.csv("StormData.csv"));
+    dim(StormData);
+    
+    Storm <- StormData[, c("COUNTYNAME", "STATE", "EVTYPE", "FATALITIES",
+        "INJURIES", "PROPDMG", "PROPDMGEXP", "CROPDMG", "CROPDMGEXP")];
+    
+```
+
+
+## Property Damage
+
+
+## Population Health
+
+
+
+
