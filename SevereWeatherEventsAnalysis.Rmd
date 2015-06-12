@@ -87,11 +87,16 @@ This report explores the NOAA Storm Events Database in an attempt to determine w
         | STATE_NAME=="New York");
      ECONOMIC <- ddply(ECONOMIC_Full, .(STATE_NAME, EVTYPE), summarise, 
         ECONOMIC=sum(ECONOMIC));
+    ECONOMIC <- ECONOMIC[ECONOMIC$ECONOMIC !=0, ];
+
 
 #   Narrow Scope to Texas
     HEALTH_Full <- subset(StormData, STATE_NAME=="Texas");
     HEALTH <- ddply(HEALTH_Full, .(STATE_NAME, EVTYPE), summarise, 
         HEALTH=sum(HEALTH));
+
+#   Top 10 EVTYPE
+    HEALTH <- head(HEALTH[order(HEALTH$HEALTH),], n=10);
 
 ```
 
@@ -103,17 +108,6 @@ This report explores the NOAA Storm Events Database in an attempt to determine w
         options=list(region='US', colors='[0xFF8747, 0xFFB581, 0xc06000]', 
         dataMode='regions', height=350, width=600));
     plot(Geo);
-
-
-    g <- ggplot(StormData, aes(ECONOMIC))
-    g <- g + geom_histogram(aes(ECONOMIC), binwidth=2500, color="black", fill="green", 
-        alpha=.5)
-    g <- g + ggtitle("Number of Steps Taken per Day") + labs(x="Steps", y="Frequency")
-    g <- g  + theme_bw()
-    g
-
-
-
 ```
 
 
@@ -124,6 +118,12 @@ This report explores the NOAA Storm Events Database in an attempt to determine w
         options=list(region='US', colors='[0xFF8747, 0xFFB581, 0xc06000]', 
         dataMode='regions', height=350, width=600));
     plot(Geo);
+
+    g <- ggplot(data=HEALTH, aes(x=STATE_NAME, y=HEALTH, fill=EVTYPE))
+    g <- g + geom_bar(width=.5, stat="identity")
+    #g <- g + facet_grid(facets=. ~ STATE)
+    g
+
 ```
 
 ```{r echo=F}
