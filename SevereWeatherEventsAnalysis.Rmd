@@ -1,3 +1,8 @@
+<!--
+    %\VignetteEngine{knitr::knitr}
+    %\VignetteIndexEntry{Markdown example with knitr and googleVis}
+-->
+
 ---
 title: "Severe Weather Events Analysis"
 author: "Philip A. Forsey"
@@ -14,19 +19,22 @@ This report explores the NOAA Storm Events Database in an attempt to determine w
 
 ##Load Libraries
 ```{r Libraries, eval=T, echo=T}
-suppressWarnings(library(ggplot2));
-suppressWarnings(library(dplyr));
-suppressWarnings(library(plyr));
-suppressWarnings(library(downloader));
-suppressWarnings(library(R.utils));
-suppressWarnings(library(googleVis));
+    suppressWarnings(library(ggplot2));
+    suppressWarnings(library(dplyr));
+    suppressWarnings(library(plyr));
+    suppressWarnings(library(downloader));
+    suppressWarnings(library(R.utils));
+    suppressWarnings(library(googleVis));
 ```
 
+```{r echo=F}
+    op <- options(gvis.plot.tag='chart');
+```
 
 ##Download & Uncompress Dataset
 ```{r DownloadData, eval=F, echo=T}
 
-    knitr::opts_chunk$set(cache=T)
+    knitr::opts_chunk$set(cache=T);
 
     setwd("~/Data Science/05 Reproducible Research");
     
@@ -37,7 +45,9 @@ suppressWarnings(library(googleVis));
 ```
 
 ##Read CSV File & Process Data
-```{r ReadProcessCSV, include=F, eval=T, echo=T, cache=T}
+```{r ReadProcessCSV, eval=T, echo=T, cache=T}
+
+    knitr::opts_chunk$set(cache=T);
 
     NOAA_Full <- suppressWarnings(read.csv("StormData.csv", na.strings=""));
     dim(NOAA_Full);
@@ -69,21 +79,22 @@ suppressWarnings(library(googleVis));
 
 ## Economic Impact
 
-```{r PropertyDamageChart, results='asis', tidy=F}
+```{r EconomicsImpact, echo=F, results='asis', tidy=F}
     Geo <- gvisGeoMap(StormData_ECONOMIC, locationvar='STATE_NAME', numvar='ECONOMIC', 
         options=list(region='US', colors='[0xFF8747, 0xFFB581, 0xc06000]', 
         dataMode='regions', height=350, width=600));
     plot(Geo);
-
 ```
 
 
 ## Population Health
-```{r}
+```{r PopulationHealth, echo=F, results='asis', tidy=F}
     Geo <- gvisGeoMap(StormData_HEALTH, locationvar='STATE_NAME', numvar='HEALTH', 
         options=list(region='US', colors='[0xFF8747, 0xFFB581, 0xc06000]', 
         dataMode='regions', height=350, width=600));
     plot(Geo);
-
 ```
 
+```{r echo=F}
+    options(op);
+```
