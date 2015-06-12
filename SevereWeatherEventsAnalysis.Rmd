@@ -77,7 +77,7 @@ This report explores the NOAA Storm Events Database in an attempt to determine w
 ```
 
 
-## Economic Impact
+##Economic Impact
 
 ```{r EconomicsImpact, echo=F, results='asis', tidy=F}
     Geo <- gvisGeoMap(StormData_ECONOMIC, locationvar='STATE_NAME', numvar='ECONOMIC', 
@@ -87,7 +87,8 @@ This report explores the NOAA Storm Events Database in an attempt to determine w
 ```
 
 
-## Population Health
+##Population Health
+
 ```{r PopulationHealth, echo=F, results='asis', tidy=F}
     Geo <- gvisGeoMap(StormData_HEALTH, locationvar='STATE_NAME', numvar='HEALTH', 
         options=list(region='US', colors='[0xFF8747, 0xFFB581, 0xc06000]', 
