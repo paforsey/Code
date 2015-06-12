@@ -80,7 +80,10 @@ suppressWarnings(library(googleVis));
 
 ## Population Health
 ```{r}
-
+    Geo <- gvisGeoMap(StormData_HEALTH, locationvar='STATE_NAME', numvar='HEALTH', 
+        options=list(region='US', colors='[0xFF8747, 0xFFB581, 0xc06000]', 
+        dataMode='regions', height=350, width=600));
+    plot(Geo);
 
 ```
 
