@@ -49,14 +49,17 @@ This report explores the NOAA Storm Events Database in an attempt to determine w
 
     knitr::opts_chunk$set(cache=T);
 
+#   Reading NOAA Data from CSV File
     NOAA_Full <- suppressWarnings(read.csv("StormData.csv", na.strings=""));
     dim(NOAA_Full);
     
+#   Appending State Names to Dataset
     StateNames <- suppressWarnings(read.csv("states.csv"));
     dim(StateNames);
 
     StormDataFull <- merge(x=NOAA_Full, y=StateNames, by="STATE", all.x=T);
 
+#   Converting Units for PROPDMGEXP & CROPDMGEXP
     StormDataFull$PROP_SCALE[StormDataFull$PROPDMGEXP=="M"] <- 1000000;
     StormDataFull$PROP_SCALE[StormDataFull$PROPDMGEXP=="K"] <- 1000;
     StormDataFull$PROP_SCALE[is.na(StormDataFull$PROPDMGEXP)==T] <- 1;
@@ -65,14 +68,30 @@ This report explores the NOAA Storm Events Database in an attempt to determine w
     StormDataFull$CROP_SCALE[StormDataFull$CROPDMGEXP=="K"] <- 1000;
     StormDataFull$CROP_SCALE[is.na(StormDataFull$CROPDMGEXP)==T] <- 1;
 
+#   Scaling and Combing Values for Property & Crop Damage 
     StormDataFull$ECONOMIC <- (StormDataFull$PROPDMG * StormDataFull$PROP_SCALE) + 
         (StormDataFull$CROPDMG * StormDataFull$CROP_SCALE);
+
+#   Scaling and Combining Values for Injuries & Fatalities
     StormDataFull$HEALTH <- StormDataFull$INJURIES + StormDataFull$FATALITIES;
 
+#   Narrow Scope of Dataset
     StormData <- StormDataFull[, c("STATE_NAME", "EVTYPE", "ECONOMIC", "HEALTH")];
 
+#   Aggregate Data by State
     StormData_ECONOMIC <- ddply(StormData, "STATE_NAME", summarise, ECONOMIC=sum(ECONOMIC));
     StormData_HEALTH <- ddply(StormData, "STATE_NAME", summarise, HEALTH=sum(HEALTH));
+
+#   Narrow Scope to Minnesota, Arkansas, & New York
+    ECONOMIC_Full <- subset(StormData, STATE_NAME=="Minnesota" | STATE_NAME=="Arkansas" 
+        | STATE_NAME=="New York");
+     ECONOMIC <- ddply(ECONOMIC_Full, .(STATE_NAME, EVTYPE), summarise, 
+        ECONOMIC=sum(ECONOMIC));
+
+#   Narrow Scope to Texas
+    HEALTH_Full <- subset(StormData, STATE_NAME=="Texas");
+    HEALTH <- ddply(HEALTH_Full, .(STATE_NAME, EVTYPE), summarise, 
+        HEALTH=sum(HEALTH));
 
 ```
 
@@ -84,6 +103,17 @@ This report explores the NOAA Storm Events Database in an attempt to determine w
         options=list(region='US', colors='[0xFF8747, 0xFFB581, 0xc06000]', 
         dataMode='regions', height=350, width=600));
     plot(Geo);
+
+
+    g <- ggplot(StormData, aes(ECONOMIC))
+    g <- g + geom_histogram(aes(ECONOMIC), binwidth=2500, color="black", fill="green", 
+        alpha=.5)
+    g <- g + ggtitle("Number of Steps Taken per Day") + labs(x="Steps", y="Frequency")
+    g <- g  + theme_bw()
+    g
+
+
+
 ```
 
 
