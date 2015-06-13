@@ -12,7 +12,7 @@ output: html_document
 
 #Synopsis
 
-This report explores the NOAA Storm Events Database in an attempt to determine which types of severe weather events are most harmful in terms of not only property damage, buth population health as well.  The purpose of this report is to provide government or municipal manager(s) with a resource that helps them make informed decisions as it pertains to effectively allocating limited resources.
+This report explores the NOAA Storm Events Database in an attempt to determine which types of severe weather events are most harmful in terms of not only property damage, buth population health as well.  The purpose of this report is to provide government or municipal manager(s) with a enough information to make informed decisions as it pertains to effectively allocating limited resources.
 
 [Findings...]
 
@@ -102,12 +102,15 @@ This report explores the NOAA Storm Events Database in an attempt to determine w
 
 ##Economic Impact
 
-```{r EconomicsImpact, include=T, echo=T, results='asis', tidy=F}
+
+```{r EconomicsImpactMap, include=T, echo=T, results='asis', tidy=F}
     Geo <- gvisGeoMap(StormData_ECONOMIC, locationvar='STATE_NAME', numvar='ECONOMIC', 
         options=list(region='US', colors='[0xFF8747, 0xFFB581, 0xc06000]', 
         dataMode='regions', height=350, width=600));
     plot(Geo);
-    
+```
+
+```{r EconomicsImpactGraph, include=T, echo=T, results='asis', tidy=F}
     g <- ggplot(data=ECONOMIC, aes(x=STATE_NAME, y=ECONOMIC/sum(ECONOMIC), fill=EVTYPE))
     g <- g + geom_bar(width=.5, stat="identity")
     g <- g + ggtitle("Economic Impact") 
@@ -120,7 +123,6 @@ This report explores the NOAA Storm Events Database in an attempt to determine w
 ##Population Health
 
 
-
 ```{r PopulationHealthMap, include=T, echo=T, results='asis', tidy=F}
     Geo <- gvisGeoMap(StormData_HEALTH, locationvar='STATE_NAME', numvar='HEALTH', 
         options=list(region='US', colors='[0xFF8747, 0xFFB581, 0xc06000]', 
@@ -131,7 +133,7 @@ This report explores the NOAA Storm Events Database in an attempt to determine w
 
 Upon closer examination of Texas, the top five (5) extreme weather events represent well over 80% of the total number fatalities and injuries occuring in that state.  The following graph provides a relative rank ordering of these weather events.
 
-```{r PopulationHealthGraph, echo=F, results='asis', tidy=F}
+```{r PopulationHealthGraph, include=T, echo=T, results='asis', tidy=F}
     g <- ggplot(data=HEALTH, aes(x="", y=HEALTH/sum(HEALTH), fill=EVTYPE))
     g <- g + geom_bar(width=.5, stat="identity")
     g <- g + ggtitle("Population Health") 
