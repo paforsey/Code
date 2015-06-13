@@ -14,6 +14,8 @@ output: html_document
 
 This report explores the NOAA Storm Events Database in an attempt to determine which types of severe weather events are most harmful in terms of not only property damage, buth population health as well.  The purpose of this report is to provide government or municipal manager(s) with a enough information to make informed decisions as it pertains to effectively allocating limited resources.
 
+The events in the database start in the year 1950 and end in November 2011.
+
 [Findings...]
 
 
@@ -83,19 +85,34 @@ This report explores the NOAA Storm Events Database in an attempt to determine w
     StormData_HEALTH <- ddply(StormData, "STATE_NAME", summarise, HEALTH=sum(HEALTH));
 
 #   Narrow Scope to Minnesota, Arkansas, & New York
-    ECONOMIC_Full <- subset(StormData, STATE_NAME=="Minnesota" | STATE_NAME=="Arkansas" 
-        | STATE_NAME=="New York");
-    ECONOMIC <- ddply(ECONOMIC_Full, .(STATE_NAME, EVTYPE), summarise, 
+    ECONOMIC_MN_FULL <- subset(StormData, STATE_NAME=="Minnesota");
+    ECONOMIC_AK_FULL <- subset(StormData, STATE_NAME=="Arkansas");
+    ECONOMIC_NY_FULL <- subset(StormData, STATE_NAME=="New York");
+    
+    ECONOMIC_MN <- ddply(ECONOMIC_MN_FULL, .(STATE_NAME, EVTYPE), summarise, 
+        ECONOMIC=sum(ECONOMIC));
+    ECONOMIC_AK <- ddply(ECONOMIC_AK_FULL, .(STATE_NAME, EVTYPE), summarise, 
+        ECONOMIC=sum(ECONOMIC));
+    ECONOMIC_NY <- ddply(ECONOMIC_NY_FULL, .(STATE_NAME, EVTYPE), summarise, 
         ECONOMIC=sum(ECONOMIC));
 
 #   Narrow Scope to Texas
-    HEALTH_Full <- subset(StormData, STATE_NAME=="Texas");
-    HEALTH <- ddply(HEALTH_Full, .(STATE_NAME, EVTYPE), summarise, 
+    HEALTH_TX_FULL <- subset(StormData, STATE_NAME=="Texas");
+    
+    HEALTH_TX <- ddply(HEALTH_TX_FULL, .(STATE_NAME, EVTYPE), summarise, 
         HEALTH=sum(HEALTH));
 
 #   Top 10 EVTYPE
-    ECONOMIC <- (ECONOMIC[order(ECONOMIC$STATE_NAME, -ECONOMIC$ECONOMIC), ]);    
-    HEALTH <- head(HEALTH[order(-HEALTH$HEALTH), ], n=5);
+    ECONOMIC_MN <- head(ECONOMIC_MN[order(ECONOMIC_MN$STATE_NAME, -ECONOMIC_MN$ECONOMIC), ],
+        n=5);
+    ECONOMIC_AK <- head(ECONOMIC_AK[order(ECONOMIC_AK$STATE_NAME, -ECONOMIC_AK$ECONOMIC), ],
+        n=5);    
+    ECONOMIC_NY <- head(ECONOMIC_NY[order(ECONOMIC_NY$STATE_NAME, -ECONOMIC_NY$ECONOMIC), ],
+        n=5);
+    
+    ECONOMIC <- rbind(ECONOMIC_MN, ECONOMIC_AK, ECONOMIC_NY);
+    
+    HEALTH <- head(HEALTH_TX[order(-HEALTH$HEALTH), ], n=5);
 
 ```
 
@@ -114,7 +131,7 @@ This report explores the NOAA Storm Events Database in an attempt to determine w
     g <- ggplot(data=ECONOMIC, aes(x=STATE_NAME, y=ECONOMIC/sum(ECONOMIC), fill=EVTYPE))
     g <- g + geom_bar(width=.5, stat="identity")
     g <- g + ggtitle("Economic Impact") 
-    g <- g + labs(x="State(s)", y="Injuries/Fatalities ($ Millions)")
+    g <- g + labs(x="State(s)", y="Injuries/Fatalities (%)")
     g
     
 ```
