@@ -5,12 +5,10 @@
 
 ---
 title: "Severe Weather Events Analysis"
-author: "Philip A. Forsey"
-date: "June 11, 2015"
 output: html_document
 ---
 
-#Synopsis
+##Synopsis
 
 This report explores the NOAA Storm Events Database in an attempt to determine which types of severe weather events are most harmful in terms of not only property damage, buth population health as well.  The purpose of this report is to provide government or municipal manager(s) with a enough information to make informed decisions as it pertains to effectively allocating limited resources.
 
@@ -33,7 +31,7 @@ The events in the database start in the year 1950 and end in November 2011.
     op <- options(gvis.plot.tag='chart');
 ```
 
-##Download & Uncompress Dataset
+###Download & Uncompress Dataset
 ```{r DownloadData, eval=F, echo=T}
 
     knitr::opts_chunk$set(cache=T);
@@ -46,7 +44,7 @@ The events in the database start in the year 1950 and end in November 2011.
 
 ```
 
-##Read CSV File & Process Data
+###Read CSV File & Process Data
 ```{r ReadProcessCSV, eval=T, echo=T, cache=T}
 
     knitr::opts_chunk$set(cache=T);
@@ -112,12 +110,12 @@ The events in the database start in the year 1950 and end in November 2011.
     
     ECONOMIC <- rbind(ECONOMIC_MN, ECONOMIC_AK, ECONOMIC_NY);
     
-    HEALTH <- head(HEALTH_TX[order(-HEALTH$HEALTH), ], n=5);
+    HEALTH <- head(HEALTH_TX[order(-HEALTH_TX$HEALTH), ], n=5);
 
 ```
 
 
-##Economic Impact
+###Economic Impact
 
 
 ```{r EconomicsImpactMap, include=T, echo=T, results='asis', tidy=F}
@@ -137,7 +135,7 @@ The events in the database start in the year 1950 and end in November 2011.
 ```
 
 
-##Population Health
+###Population Health
 
 
 ```{r PopulationHealthMap, include=T, echo=T, results='asis', tidy=F}
