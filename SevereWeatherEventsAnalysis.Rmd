@@ -17,14 +17,14 @@ This report explores the NOAA Storm Events Database in an attempt to determine w
 [Findings...]
 
 
-##Load Libraries
-```{r Libraries, eval=T, echo=T}
+```{r Libraries, include=F, eval=T, echo=F}
     suppressWarnings(library(ggplot2));
     suppressWarnings(library(dplyr));
     suppressWarnings(library(plyr));
     suppressWarnings(library(downloader));
     suppressWarnings(library(R.utils));
     suppressWarnings(library(googleVis));
+    suppressWarnings(library(formatR));
 ```
 
 ```{r echo=F}
@@ -40,7 +40,7 @@ This report explores the NOAA Storm Events Database in an attempt to determine w
     
     csv <- "https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2FStormData.csv.bz2";
     download(csv, "repdata-data-StormData.csv.bz2", mode="wb");
-    bunzip2("repdata-data-StormData.csv.bz2", "StormData.csv");
+    bunzip2("repdata-data-StormData.csv.bz2", "StormData.csv", overwrite=T);
 
 ```
 
@@ -85,10 +85,8 @@ This report explores the NOAA Storm Events Database in an attempt to determine w
 #   Narrow Scope to Minnesota, Arkansas, & New York
     ECONOMIC_Full <- subset(StormData, STATE_NAME=="Minnesota" | STATE_NAME=="Arkansas" 
         | STATE_NAME=="New York");
-     ECONOMIC <- ddply(ECONOMIC_Full, .(STATE_NAME, EVTYPE), summarise, 
+    ECONOMIC <- ddply(ECONOMIC_Full, .(STATE_NAME, EVTYPE), summarise, 
         ECONOMIC=sum(ECONOMIC));
-    ECONOMIC <- ECONOMIC[ECONOMIC$ECONOMIC !=0, ];
-
 
 #   Narrow Scope to Texas
     HEALTH_Full <- subset(StormData, STATE_NAME=="Texas");
@@ -96,36 +94,53 @@ This report explores the NOAA Storm Events Database in an attempt to determine w
         HEALTH=sum(HEALTH));
 
 #   Top 10 EVTYPE
-    HEALTH <- head(HEALTH[order(HEALTH$HEALTH),], n=10);
+    ECONOMIC <- (ECONOMIC[order(ECONOMIC$STATE_NAME, -ECONOMIC$ECONOMIC), ]);    
+    HEALTH <- head(HEALTH[order(-HEALTH$HEALTH), ], n=5);
 
 ```
 
 
 ##Economic Impact
 
-```{r EconomicsImpact, echo=F, results='asis', tidy=F}
+```{r EconomicsImpact, include=T, echo=T, results='asis', tidy=F}
     Geo <- gvisGeoMap(StormData_ECONOMIC, locationvar='STATE_NAME', numvar='ECONOMIC', 
+        options=list(region='US', colors='[0xFF8747, 0xFFB581, 0xc06000]', 
+        dataMode='regions', height=350, width=600));
+    plot(Geo);
+    
+    g <- ggplot(data=ECONOMIC, aes(x=STATE_NAME, y=ECONOMIC/sum(ECONOMIC), fill=EVTYPE))
+    g <- g + geom_bar(width=.5, stat="identity")
+    g <- g + ggtitle("Economic Impact") 
+    g <- g + labs(x="State(s)", y="Injuries/Fatalities ($ Millions)")
+    g
+    
+```
+
+
+##Population Health
+
+
+
+```{r PopulationHealthMap, include=T, echo=T, results='asis', tidy=F}
+    Geo <- gvisGeoMap(StormData_HEALTH, locationvar='STATE_NAME', numvar='HEALTH', 
         options=list(region='US', colors='[0xFF8747, 0xFFB581, 0xc06000]', 
         dataMode='regions', height=350, width=600));
     plot(Geo);
 ```
 
 
-##Population Health
+Upon closer examination of Texas, the top five (5) extreme weather events represent well over 80% of the total number fatalities and injuries occuring in that state.  The following graph provides a relative rank ordering of these weather events.
 
-```{r PopulationHealth, echo=F, results='asis', tidy=F}
-    Geo <- gvisGeoMap(StormData_HEALTH, locationvar='STATE_NAME', numvar='HEALTH', 
-        options=list(region='US', colors='[0xFF8747, 0xFFB581, 0xc06000]', 
-        dataMode='regions', height=350, width=600));
-    plot(Geo);
-
-    g <- ggplot(data=HEALTH, aes(x=STATE_NAME, y=HEALTH, fill=EVTYPE))
+```{r PopulationHealthGraph, echo=F, results='asis', tidy=F}
+    g <- ggplot(data=HEALTH, aes(x="", y=HEALTH/sum(HEALTH), fill=EVTYPE))
     g <- g + geom_bar(width=.5, stat="identity")
-    #g <- g + facet_grid(facets=. ~ STATE)
+    g <- g + ggtitle("Population Health") 
+    g <- g + labs(x="Texas", y="Injuries/Fatalities (%)")
     g
 
 ```
 
 ```{r echo=F}
     options(op);
+
 ```
