@@ -33,7 +33,6 @@ The events in the database start in the year 1950 and end in November 2011.
 
 ###Download & Uncompress Dataset
 ```{r DownloadData, eval=F, echo=T}
-
     knitr::opts_chunk$set(cache=T);
 
     setwd("~/Data Science/05 Reproducible Research");
@@ -41,18 +40,20 @@ The events in the database start in the year 1950 and end in November 2011.
     csv <- "https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2FStormData.csv.bz2";
     download(csv, "repdata-data-StormData.csv.bz2", mode="wb");
     bunzip2("repdata-data-StormData.csv.bz2", "StormData.csv", overwrite=T);
-
 ```
 
 ###Read CSV File & Process Data
 ```{r ReadProcessCSV, eval=T, echo=T, cache=T}
-
     knitr::opts_chunk$set(cache=T);
 
 #   Reading NOAA Data from CSV File
-    NOAA_Full <- suppressWarnings(read.csv("StormData.csv", na.strings=""));
+    tidy.opts=list(blank=F, width.cutoff=60);
+    options(width = 60, scipen = 10);
+    NOAA_Full <- read.csv("StormData.csv", na.strings=c("","  ", "NA"),
+        header=TRUE, sep=",", stringsAsFactors=FALSE, strip.white=TRUE, comment.char="",
+        quote = '\"')[,1:35];
     dim(NOAA_Full);
-    
+        
 #   Appending State Names to Dataset
     StateNames <- suppressWarnings(read.csv("states.csv"));
     dim(StateNames);
@@ -60,12 +61,12 @@ The events in the database start in the year 1950 and end in November 2011.
     StormDataFull <- merge(x=NOAA_Full, y=StateNames, by="STATE", all.x=T);
 
 #   Converting Units for PROPDMGEXP & CROPDMGEXP
-    StormDataFull$PROP_SCALE[StormDataFull$PROPDMGEXP=="M"] <- 1000000;
-    StormDataFull$PROP_SCALE[StormDataFull$PROPDMGEXP=="K"] <- 1000;
+    StormDataFull$PROP_SCALE[StormDataFull$PROPDMGEXP=="M"] <- 1000;
+    StormDataFull$PROP_SCALE[StormDataFull$PROPDMGEXP=="K"] <- 1;
     StormDataFull$PROP_SCALE[is.na(StormDataFull$PROPDMGEXP)==T] <- 1;
 
-    StormDataFull$CROP_SCALE[StormDataFull$CROPDMGEXP=="M"] <- 1000000;
-    StormDataFull$CROP_SCALE[StormDataFull$CROPDMGEXP=="K"] <- 1000;
+    StormDataFull$CROP_SCALE[StormDataFull$CROPDMGEXP=="M"] <- 1000;
+    StormDataFull$CROP_SCALE[StormDataFull$CROPDMGEXP=="K"] <- 1;
     StormDataFull$CROP_SCALE[is.na(StormDataFull$CROPDMGEXP)==T] <- 1;
 
 #   Scaling and Combing Values for Property & Crop Damage 
@@ -77,87 +78,66 @@ The events in the database start in the year 1950 and end in November 2011.
 
 #   Narrow Scope of Dataset
     StormData <- StormDataFull[, c("STATE_NAME", "EVTYPE", "ECONOMIC", "HEALTH")];
-
-#   Aggregate Data by State
-    StormData_ECONOMIC <- ddply(StormData, "STATE_NAME", summarise, ECONOMIC=sum(ECONOMIC));
-    StormData_HEALTH <- ddply(StormData, "STATE_NAME", summarise, HEALTH=sum(HEALTH));
-
-#   Narrow Scope to Minnesota, Arkansas, & New York
-    ECONOMIC_MN_FULL <- subset(StormData, STATE_NAME=="Minnesota");
-    ECONOMIC_AK_FULL <- subset(StormData, STATE_NAME=="Arkansas");
-    ECONOMIC_NY_FULL <- subset(StormData, STATE_NAME=="New York");
     
-    ECONOMIC_MN <- ddply(ECONOMIC_MN_FULL, .(STATE_NAME, EVTYPE), summarise, 
-        ECONOMIC=sum(ECONOMIC));
-    ECONOMIC_AK <- ddply(ECONOMIC_AK_FULL, .(STATE_NAME, EVTYPE), summarise, 
-        ECONOMIC=sum(ECONOMIC));
-    ECONOMIC_NY <- ddply(ECONOMIC_NY_FULL, .(STATE_NAME, EVTYPE), summarise, 
-        ECONOMIC=sum(ECONOMIC));
+#   Aggregate Data by State
+    StormData_ECONOMIC <- ddply(StormData, "STATE_NAME", summarise, ECONOMIC=sum(ECONOMIC, 
+        na.rm=T));
+    StormData_HEALTH <- ddply(StormData, "STATE_NAME", summarise, HEALTH=sum(HEALTH, 
+        na.rm= T));
 
 #   Narrow Scope to Texas
+    ECONOMIC_TX_FULL <- subset(StormData, STATE_NAME=="Texas");
+    ECONOMIC_TX <- ddply(ECONOMIC_TX_FULL, .(STATE_NAME, EVTYPE), summarise, 
+        ECONOMIC=sum(ECONOMIC));
+
     HEALTH_TX_FULL <- subset(StormData, STATE_NAME=="Texas");
-    
     HEALTH_TX <- ddply(HEALTH_TX_FULL, .(STATE_NAME, EVTYPE), summarise, 
         HEALTH=sum(HEALTH));
 
-#   Top 10 EVTYPE
-    ECONOMIC_MN <- head(ECONOMIC_MN[order(ECONOMIC_MN$STATE_NAME, -ECONOMIC_MN$ECONOMIC), ],
-        n=5);
-    ECONOMIC_AK <- head(ECONOMIC_AK[order(ECONOMIC_AK$STATE_NAME, -ECONOMIC_AK$ECONOMIC), ],
-        n=5);    
-    ECONOMIC_NY <- head(ECONOMIC_NY[order(ECONOMIC_NY$STATE_NAME, -ECONOMIC_NY$ECONOMIC), ],
-        n=5);
-    
-    ECONOMIC <- rbind(ECONOMIC_MN, ECONOMIC_AK, ECONOMIC_NY);
-    
+#   Top 5 EVTYPE for Texas ECONOMIC & HEALTH
+    ECONOMIC <- head(ECONOMIC_TX[order(-ECONOMIC_TX$ECONOMIC), ], n=5);
     HEALTH <- head(HEALTH_TX[order(-HEALTH_TX$HEALTH), ], n=5);
-
 ```
 
 
 ###Economic Impact
 
-
 ```{r EconomicsImpactMap, include=T, echo=T, results='asis', tidy=F}
-    Geo <- gvisGeoMap(StormData_ECONOMIC, locationvar='STATE_NAME', numvar='ECONOMIC', 
+    Geo1 <- gvisGeoMap(StormData_ECONOMIC, locationvar='STATE_NAME', numvar='ECONOMIC', 
         options=list(region='US', colors='[0xFF8747, 0xFFB581, 0xc06000]', 
         dataMode='regions', height=350, width=600));
-    plot(Geo);
+    plot(Geo1);
 ```
 
 ```{r EconomicsImpactGraph, include=T, echo=T, results='asis', tidy=F}
-    g <- ggplot(data=ECONOMIC, aes(x=STATE_NAME, y=ECONOMIC/sum(ECONOMIC), fill=EVTYPE))
-    g <- g + geom_bar(width=.5, stat="identity")
-    g <- g + ggtitle("Economic Impact") 
-    g <- g + labs(x="State(s)", y="Injuries/Fatalities (%)")
-    g
-    
+    g1 <- ggplot(data=ECONOMIC, aes(x="", y=ECONOMIC/sum(ECONOMIC), fill=EVTYPE))
+    g1 <- g1 + geom_bar(width=.5, stat="identity")
+    g1 <- g1 + ggtitle("Economic Impact") 
+    g1 <- g1 + labs(x="Texas", y="Injuries/Fatalities (%)")
+    g1
 ```
 
 
 ###Population Health
 
-
 ```{r PopulationHealthMap, include=T, echo=T, results='asis', tidy=F}
-    Geo <- gvisGeoMap(StormData_HEALTH, locationvar='STATE_NAME', numvar='HEALTH', 
+    Geo2 <- gvisGeoMap(StormData_HEALTH, locationvar='STATE_NAME', numvar='HEALTH', 
         options=list(region='US', colors='[0xFF8747, 0xFFB581, 0xc06000]', 
         dataMode='regions', height=350, width=600));
-    plot(Geo);
+    plot(Geo2);
 ```
 
 
 Upon closer examination of Texas, the top five (5) extreme weather events represent well over 80% of the total number fatalities and injuries occuring in that state.  The following graph provides a relative rank ordering of these weather events.
 
 ```{r PopulationHealthGraph, include=T, echo=T, results='asis', tidy=F}
-    g <- ggplot(data=HEALTH, aes(x="", y=HEALTH/sum(HEALTH), fill=EVTYPE))
-    g <- g + geom_bar(width=.5, stat="identity")
-    g <- g + ggtitle("Population Health") 
-    g <- g + labs(x="Texas", y="Injuries/Fatalities (%)")
-    g
-
+    g2 <- ggplot(data=HEALTH, aes(x="", y=HEALTH/sum(HEALTH), fill=EVTYPE))
+    g2 <- g2 + geom_bar(width=.5, stat="identity")
+    g2 <- g2 + ggtitle("Population Health") 
+    g2 <- g2 + labs(x="Texas", y="Injuries/Fatalities (%)")
+    g2
 ```
 
 ```{r echo=F}
     options(op);
-
 ```
