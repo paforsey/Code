@@ -12,7 +12,7 @@ output: html_document
 
 This report explores the NOAA Storm Events Database in an attempt to determine which types of severe weather events are most harmful in terms of not only property, but population health as well.  The purpose of this report is to provide government or municipal manager(s) with a enough information to make informed decisions as it pertains to effectively allocating limited resources.
 
-Analysis revealed that the state of Texas was most affected by severe weather events from JAN 1950 through NOV 2011.  During this period of time, the state experienced approximately $19.5 Billion in property damage and more than 19,033 injuries and fatalities that can be directly attributed to Tornado, Hail, Flood, Flash Flood, Wild Fire, Heat, and TSTM Wind. 
+Analysis revealed that the state of Texas was most affected by severe weather events from JAN 1950 through NOV 2011.  During this period of time, the state experienced approximately $19.5 Billion in property damage and more than 19,000 injuries and fatalities that can be directly attributed to Tornado, Hail, Flood, Flash Flood, Wild Fire, Heat, and TSTM Wind. 
  
  
 ```{r Libraries, include=F, eval=T, echo=F}
@@ -116,7 +116,7 @@ Texas was the hardest hit with a total of $19.5 Billion in combined property and
     g1 <- ggplot(data=ECONOMIC, aes(x="", y=ECONOMIC/sum(ECONOMIC), fill=EVTYPE))
     g1 <- g1 + geom_bar(width=.5, stat="identity")
     g1 <- g1 + ggtitle("Top 5 Event Types Affecting Property") 
-    g1 <- g1 + labs(x="Texas", y="Injuries/Fatalities (%)")
+    g1 <- g1 + labs(x="Texas", y="Property Damage (%)")
     g1
 ```
 
