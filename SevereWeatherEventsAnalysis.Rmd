@@ -159,7 +159,7 @@ The top five (5) severe weather events attributed to well over 80% of the total 
  
  
 Note:
-The scope of this analysis does not include US territories, such as Guam and the Virgin Islands, as they represent less than 2% of the overall effect of severe weather events.
+The scope of this analysis does not include US territories, such as the Virgin Islands or Guam, as severe weather events in these areas represent less than 2% of the overall the property dammage, injury, and fatality statistics contained in the NOAA Storm Events Database.
 ```{r echo=F}
     options(op);
 ```
