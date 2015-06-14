@@ -7,21 +7,14 @@
 title: "Severe Weather Events Analysis"
 output: html_document
 ---
-
+  
 ##Synopsis
-
+  
 This report explores the NOAA Storm Events Database in an attempt to determine which types of severe weather events are most harmful in terms of not only property, but population health as well.  The purpose of this report is to provide government or municipal manager(s) with a enough information to make informed decisions as it pertains to effectively allocating limited resources.
-
-Analysis revealed that the state of Texas was most affected by severe weather events from JAN 1950 through NOV 2011.  During this period of time, the state experienced approximately $19.5 Billion in property damage and more than 19,000 injuries and fatalities that can be directly attributed to Tornado, Hail, Flood, Flash Flood, Wild Fire, Heat, and TSTM Wind. 
-
-Does the analysis address the question of which types of events are most harmful to population health?
-
-Does the analysis address the question of which types of events have the greatest economic consequences?
-
-Do the figure(s) have descriptive captions (i.e. there is a description near the figure of what is happening in the figure)?
-
-Does the analysis include description and justification for any data transformations?
- 
+  
+Analysis revealed that the severe weather event most harmful to both property and population health was Tornado.  The overall impact was approximately $51.99 billion in property damage and almost 97,000 injuries and fatalities occurring from JAN 1950 through NOV 2011.  During this period of time, the state most affected was Texas with approximately $19.5 billion in property damage and more than 19,000 injuries and fatalities. 
+  
+   
 ```{r Libraries, include=F, eval=T, echo=F}
     suppressWarnings(library(ggplot2));
     suppressWarnings(library(dplyr));
@@ -35,8 +28,8 @@ Does the analysis include description and justification for any data transformat
 ```{r echo=F}
     op <- options(gvis.plot.tag='chart');
 ```
- 
- 
+   
+   
 ##Data Processing
 describes how the data were loaded into R and processed for analysis
 ```{r DataProcessing, eval=F, echo=T}
@@ -75,13 +68,12 @@ describes how the data were loaded into R and processed for analysis
     StormDataFull$CROP_SCALE[StormDataFull$CROPDMGEXP=="K"] <- 1;
     StormDataFull$CROP_SCALE[is.na(StormDataFull$CROPDMGEXP)==T] <- 1;
 ```
- 
- 
+   
+   
 ##Results
 Severe weather events are evaluated in terms of their impact on both property and population health.  These quantitative measures are defined as follows:
-
-Economic Impact = Amount of Property Damage + Amount of Crop Damage
-
+  
+Economic Impact = Amount of Property Damage + Amount of Crop Damage  
 Population Health = Number of Injuries + Number of Fatalities
 ````{r}
 #   Scaling and Grouping Values for Property & Crop Damage 
@@ -94,11 +86,11 @@ Population Health = Number of Injuries + Number of Fatalities
 #   Narrow Scope of Dataset
     StormData <- StormDataFull[, c("STATE_NAME", "EVTYPE", "ECONOMIC", "HEALTH")];
 ```
- 
- 
+   
+   
 ###Economic Impact
 Total Amount of Property Damage
-
+  
 ```{r EconomicsImpactGraph, include=T, echo=T, results='asis'}
 #   Property Damage
     ECONOMIC_FULL <- ddply(StormData, .(EVTYPE), summarise, 
@@ -117,9 +109,11 @@ Total Amount of Property Damage
     plot(Column1);
     
 ```
-
-Figure 1.1: The top ten severe weather events are responsible well over 80% of the total amount of property damage.
-
+  
+    
+Figure 1.1: The top ten severe weather events are responsible over 80% of the total amount of property damage.
+  
+  
 ```{r EconomicsImpactMap, include=T, echo=T, results='asis'}
 #   Aggregate Property Damage Data by State
     StormData_ECONOMIC <- ddply(StormData, "STATE_NAME", summarise, 
@@ -132,12 +126,14 @@ Figure 1.1: The top ten severe weather events are responsible well over 80% of t
         title="Total Property Damage", dataMode='regions'));
     plot(Geo1);
 ```
+  
+    
 Figure 1.2: Texas was the hardest hit with a total of $19.5 Billion in combined property and crop damage.
- 
- 
+   
+   
 ###Population Health
 Total Number of Injuries & Fatalities
-
+  
 ```{r PopulationHealthGraph, include=T, echo=T, results='asis'}
 #   Population Health
     HEALTH_FULL <- ddply(StormData, .(EVTYPE), summarise, 
@@ -154,9 +150,11 @@ Total Number of Injuries & Fatalities
         vAxis="{title:'Injuries & Fatalities'}"));
     plot(Column2);
 ```
-
-Figure 2.1: The top five severe weather events attributed to well over 80% of the total number fatalities and injuries.
-
+  
+    
+Figure 2.1: The top ten severe weather events attributed to over 85% of the total number fatalities and injuries.
+  
+  
 ```{r PopulationHealthMap, include=T, echo=T, results='asis'}
 #   Aggregate Population Health Data by State
     StormData_HEALTH <- ddply(StormData, "STATE_NAME", summarise, HEALTH=sum(HEALTH, 
@@ -168,9 +166,11 @@ Figure 2.1: The top five severe weather events attributed to well over 80% of th
         dataMode='regions', height=350, width=600));
     plot(Geo2);
 ```
-
+  
+    
 Figure 2.2: Again, Texas was the hardest hit with a total of 19,033 in the number of injuries and fatalities.
-
+  
+  
 ```{r echo=F}
     options(op);
 ```
