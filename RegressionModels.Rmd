@@ -1,13 +1,15 @@
 ---
-title: "Regression Models"
+title: "MPG & Transmission Type"
 output: html_document
 ---
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
 
 ```{r}
+
+setwd("~/Data Science/07 Regression Models");
+
+
 data(mtcars);
 dim(mtcars);
 head(mtcars, n=5);
@@ -16,9 +18,9 @@ head(mtcars, n=5);
 
 You can also embed plots, for example:
 
-```{r, echo=FALSE}
-mtcars$am <- as.factor(mtcars$am);
-levels(mtcars$am) <- c("Automatic", "Manual");
+```{r}
+#mtcars$am <- as.factor(mtcars$am);
+#levels(mtcars$am) <- c("Automatic", "Manual");
 head(mtcars, n=5);
 
 boxplot(mpg~am, data=mtcars,
@@ -30,11 +32,44 @@ boxplot(mpg~am, data=mtcars,
 
 aggregate(mpg~am, data=mtcars, mean);
 
-autoData <- mtcars[mtcars$am == "Automatic",]
-manualData <- mtcars[mtcars$am == "Manual",]
-t.test(autoData$mpg, manualData$mpg)
+autoData <- mtcars[mtcars$am=="Automatic", ];
+manualData <- mtcars[mtcars$am=="Manual", ];
+t.test(autoData$mpg, manualData$mpg);
 
+cor(mtcars)[1, ];
+
+fit <- lm(mpg~am, data=mtcars);
+summary(fit);
+
+
+stepmodel = step(lm(data = mtcars, mpg ~ .),trace=0,steps=10000);
+summary(stepmodel);
+
+bestfit <- lm(mpg~am + wt + qsec, data = mtcars);
+anova(fit, bestfit);
+
+summary(bestfit);
 
 ```
 
+```{r}
 
+par(mfrow = c(1, 2));
+# Histogram with Normal Curve
+x <- mtcars$mpg;
+h<-hist(x, breaks=10, col="red", xlab="Miles Per Gallon",
+   main="Histogram of Miles per Gallon");
+xfit<-seq(min(x),max(x),length=40);
+yfit<-dnorm(xfit,mean=mean(x),sd=sd(x));
+yfit <- yfit*diff(h$mids[1:2])*length(x);
+lines(xfit, yfit, col="blue", lwd=2);
+
+# Kernel Density Plot
+d <- density(mtcars$mpg);
+plot(d, xlab = "MPG", main ="Density Plot of MPG");
+
+
+par(mfrow=c(2,2));
+plot(bestfit);
+
+```
