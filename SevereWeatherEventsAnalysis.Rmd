@@ -69,7 +69,7 @@ This report explores the NOAA Storm Events Database in an attempt to determine w
 ```
 
 
-###Property & Population Health
+###Severe Weather Impact on Property & Population Health
 Severe weather events are evaluated in terms of their impact on both property and population health.  These quantitative measures are defined as follows:
 
 Economic Impact = Amount of Property Damage + Amount of Crop Damage
@@ -90,7 +90,7 @@ Population Health = Number of Injuries + Number of Fatalities
 
 ###Economic Impact
 Total Property Damage ($ Billions)
-```{r EconomicsImpactMap, include=T, echo=F, results='asis'}
+```{r EconomicsImpactMap, include=T, echo=T, results='asis'}
 #   Aggregate Property Damage Data by State
     StormData_ECONOMIC <- ddply(StormData, "STATE_NAME", summarise, 
         ECONOMIC=sum(ECONOMIC, na.rm=T)/1000000);  # Round to Billions
@@ -104,7 +104,7 @@ Total Property Damage ($ Billions)
 Texas was the hardest hit with a total of $19.5 Billion in combined property and crop damage from JAN 1950 through NOV 2011.
 
 
-```{r EconomicsImpactGraph, include=T, echo=F, results='asis'}
+```{r EconomicsImpactGraph, include=T, echo=T, results='asis'}
 #   Narrow Scope to Most Effected State: Texas
     ECONOMIC_TX_FULL <- subset(StormData, STATE_NAME=="Texas");
     ECONOMIC_TX <- ddply(ECONOMIC_TX_FULL, .(STATE_NAME, EVTYPE), summarise, 
@@ -125,7 +125,7 @@ The top five (5) extreme weather events responsible well over 80% of the total a
 
 ###Population Health
 Total Number of Injuries & Fatalities
-```{r PopulationHealthMap, include=T, echo=F, results='asis'}
+```{r PopulationHealthMap, include=T, echo=T, results='asis'}
 #   Aggregate Population Health Data by State
     StormData_HEALTH <- ddply(StormData, "STATE_NAME", summarise, HEALTH=sum(HEALTH, 
         na.rm= T));
@@ -139,7 +139,7 @@ Total Number of Injuries & Fatalities
 Again, Texas was the hardest hit with a total of 19,033 in the number of injuries and fatalities from JAN 1950 through NOV 2011.
 
 
-```{r PopulationHealthGraph, include=T, echo=F, results='asis'}
+```{r PopulationHealthGraph, include=T, echo=T, results='asis'}
 #   Narrow Scope to Most Effected State: Texas
     HEALTH_TX_FULL <- subset(StormData, STATE_NAME=="Texas");
     HEALTH_TX <- ddply(HEALTH_TX_FULL, .(STATE_NAME, EVTYPE), summarise, 
