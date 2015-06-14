@@ -97,7 +97,29 @@ Population Health = Number of Injuries + Number of Fatalities
  
  
 ###Economic Impact
-Total Property Damage ($ Billions)
+Total Amount of Property Damage
+
+```{r EconomicsImpactGraph, include=T, echo=T, results='asis'}
+#   Property Damage
+    ECONOMIC_FULL <- ddply(StormData, .(EVTYPE), summarise, 
+        ECONOMIC=sum(ECONOMIC, na.rm=T)/1000000);
+    ECONOMIC_FULL$ECONOMIC <- round(ECONOMIC_FULL$ECONOMIC, digits=2);
+    
+#   Property Damage: Top 10 EVTYPE
+    ECONOMIC <- ECONOMIC_FULL[order(-ECONOMIC_FULL$ECONOMIC), ];
+    ECONOMIC <- head(ECONOMIC[ECONOMIC$ECONOMIC>0, ], n=10);
+    
+    ## Property Damage Column Chart
+    Column1 <- gvisColumnChart(ECONOMIC,
+        options=list(legend='none', height=350, width=600, 
+        title="Property Damage: Top 10 Events", hAxis="{title:'Severe Weather Event'}", 
+        vAxis="{title:'Property Damage ($ Billions)'}"));
+    plot(Column1);
+    
+```
+
+Figure 1.1: The top ten severe weather events are responsible well over 80% of the total amount of property damage.
+
 ```{r EconomicsImpactMap, include=T, echo=T, results='asis'}
 #   Aggregate Property Damage Data by State
     StormData_ECONOMIC <- ddply(StormData, "STATE_NAME", summarise, 
@@ -106,34 +128,35 @@ Total Property Damage ($ Billions)
 
 #   Geograhic Representation of Property Damage by State
     Geo1 <- gvisGeoMap(StormData_ECONOMIC, locationvar='STATE_NAME', numvar='ECONOMIC', 
-        options=list(region='US', colors='[0xA36685, 0x470024]', 
-        dataMode='regions', height=350, width=600));
+        options=list(region='US', colors='[0xA36685, 0x470024]', height=350, width=600,
+        title="Total Property Damage", dataMode='regions'));
     plot(Geo1);
 ```
-Figure 1.1: Texas was the hardest hit with a total of $19.5 Billion in combined property and crop damage from JAN 1950 through NOV 2011.
- 
- 
-```{r EconomicsImpactGraph, include=T, echo=T, results='asis'}
-#   Narrow Scope to Most Effected State: Texas
-    ECONOMIC_TX_FULL <- subset(StormData, STATE_NAME=="Texas");
-    ECONOMIC_TX <- ddply(ECONOMIC_TX_FULL, .(STATE_NAME, EVTYPE), summarise, 
-        ECONOMIC=sum(ECONOMIC));
-
-#   Top 5 EVTYPE
-    ECONOMIC <- head(ECONOMIC_TX[order(-ECONOMIC_TX$ECONOMIC), ], n=5);
-
-    g1 <- ggplot(data=ECONOMIC, aes(x="", y=ECONOMIC/sum(ECONOMIC), fill=EVTYPE))
-    g1 <- g1 + geom_bar(width=.5, stat="identity")
-    g1 <- g1 + ggtitle("Top 5 Event Types Affecting Property") 
-    g1 <- g1 + labs(x="Texas", y="Property Damage (%)")
-    g1
-```
-
-Figure 1.2: The top five severe weather events responsible well over 80% of the total amount of property in the state of Texas: 1) Hail, 2) Flood, 3) Flash Flood, 4) Wild Fire, and 5) TSTM Wind.
+Figure 1.2: Texas was the hardest hit with a total of $19.5 Billion in combined property and crop damage.
  
  
 ###Population Health
 Total Number of Injuries & Fatalities
+
+```{r PopulationHealthGraph, include=T, echo=T, results='asis'}
+#   Population Health
+    HEALTH_FULL <- ddply(StormData, .(EVTYPE), summarise, 
+        HEALTH=sum(HEALTH, na.rm=T));
+    
+#   Population Health: Top 10 EVTYPE
+    HEALTH <- HEALTH_FULL[order(-HEALTH_FULL$HEALTH), ];
+    HEALTH <- head(HEALTH[HEALTH$HEALTH>0, ], n=10);
+    
+    ## Property Damage Column Chart
+    Column2 <- gvisColumnChart(HEALTH,
+        options=list(legend='none', height=350, width=600, 
+        title="Population Health: Top 10 Events", hAxis="{title:'Severe Weather Event'}", 
+        vAxis="{title:'Injuries & Fatalities'}"));
+    plot(Column2);
+```
+
+Figure 2.1: The top five severe weather events attributed to well over 80% of the total number fatalities and injuries.
+
 ```{r PopulationHealthMap, include=T, echo=T, results='asis'}
 #   Aggregate Population Health Data by State
     StormData_HEALTH <- ddply(StormData, "STATE_NAME", summarise, HEALTH=sum(HEALTH, 
@@ -146,30 +169,8 @@ Total Number of Injuries & Fatalities
     plot(Geo2);
 ```
 
-Figure 2.1: Again, Texas was the hardest hit with a total of 19,033 in the number of injuries and fatalities from JAN 1950 through NOV 2011.
- 
- 
-```{r PopulationHealthGraph, include=T, echo=T, results='asis'}
-#   Narrow Scope to Most Effected State: Texas
-    HEALTH_TX_FULL <- subset(StormData, STATE_NAME=="Texas");
-    HEALTH_TX <- ddply(HEALTH_TX_FULL, .(STATE_NAME, EVTYPE), summarise, 
-        HEALTH=sum(HEALTH));
+Figure 2.2: Again, Texas was the hardest hit with a total of 19,033 in the number of injuries and fatalities.
 
-#   Top 5 EVTYPE
-    HEALTH <- head(HEALTH_TX[order(-HEALTH_TX$HEALTH), ], n=5);
-
-    g2 <- ggplot(data=HEALTH, aes(x="", y=HEALTH/sum(HEALTH), fill=EVTYPE))
-    g2 <- g2 + geom_bar(width=.5, stat="identity")
-    g2 <- g2 + ggtitle("Top 5 Events Affecting Population Health") 
-    g2 <- g2 + labs(x="Texas", y="Injuries/Fatalities (%)")
-    g2
-```
-
-Figure 2.2: The top five severe weather events attributed to well over 80% of the total number fatalities and injuries occuring in the state of Texas: 1) Tornado, 2) Flood, 3) Flash Flood, 4) Heat, and 5) TSTM Wind.
-
-
-Note:
-The scope of this analysis does not include US territories, such as the Virgin Islands or Guam, as severe weather events in these areas represent less than 2% of the overall the property dammage, injury, and fatality statistics contained in the NOAA Storm Events Database.
 ```{r echo=F}
     options(op);
 ```
