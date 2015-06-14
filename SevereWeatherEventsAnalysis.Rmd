@@ -13,7 +13,14 @@ output: html_document
 This report explores the NOAA Storm Events Database in an attempt to determine which types of severe weather events are most harmful in terms of not only property, but population health as well.  The purpose of this report is to provide government or municipal manager(s) with a enough information to make informed decisions as it pertains to effectively allocating limited resources.
 
 Analysis revealed that the state of Texas was most affected by severe weather events from JAN 1950 through NOV 2011.  During this period of time, the state experienced approximately $19.5 Billion in property damage and more than 19,000 injuries and fatalities that can be directly attributed to Tornado, Hail, Flood, Flash Flood, Wild Fire, Heat, and TSTM Wind. 
- 
+
+Does the analysis address the question of which types of events are most harmful to population health?
+
+Does the analysis address the question of which types of events have the greatest economic consequences?
+
+Do the figure(s) have descriptive captions (i.e. there is a description near the figure of what is happening in the figure)?
+
+Does the analysis include description and justification for any data transformations?
  
 ```{r Libraries, include=F, eval=T, echo=F}
     suppressWarnings(library(ggplot2));
@@ -30,22 +37,23 @@ Analysis revealed that the state of Texas was most affected by severe weather ev
 ```
  
  
-###Download & Uncompress Dataset
-```{r DownloadData, eval=F, echo=T}
+##Data Processing
+describes how the data were loaded into R and processed for analysis
+```{r DataProcessing, eval=F, echo=T}
     knitr::opts_chunk$set(cache=T);
 
+#   Set Working Directory
     setwd("~/Data Science/05 Reproducible Research");
-    
+
+#   Download & Uncompress CSV File
     csv <- "https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2FStormData.csv.bz2";
     download(csv, "repdata-data-StormData.csv.bz2", mode="wb");
     bunzip2("repdata-data-StormData.csv.bz2", "StormData.csv", overwrite=T);
 ```
- 
- 
-###Read CSV File & Process Data
+
 ```{r ReadProcessCSV, eval=T, echo=T, cache=T}
 
-#   Reading NOAA Data from CSV File
+#   Reading NOAA Severe Weather Events Data
     NOAA_Full <- read.csv("StormData.csv", na.strings=c("","  ", "NA"),
         header=TRUE, sep=",", stringsAsFactors=FALSE, strip.white=TRUE, comment.char="",
         quote = '\"')[,1:35];  # Dropping Last Two Variables
@@ -69,7 +77,7 @@ Analysis revealed that the state of Texas was most affected by severe weather ev
 ```
  
  
-###Severe Weather Impact on Property & Population Health
+##Results
 Severe weather events are evaluated in terms of their impact on both property and population health.  These quantitative measures are defined as follows:
 
 Economic Impact = Amount of Property Damage + Amount of Crop Damage
@@ -95,13 +103,14 @@ Total Property Damage ($ Billions)
     StormData_ECONOMIC <- ddply(StormData, "STATE_NAME", summarise, 
         ECONOMIC=sum(ECONOMIC, na.rm=T)/1000000);  # Round to Billions
     StormData_ECONOMIC$ECONOMIC <- round(StormData_ECONOMIC$ECONOMIC, digits=2);
-    
+
+#   Geograhic Representation of Property Damage by State
     Geo1 <- gvisGeoMap(StormData_ECONOMIC, locationvar='STATE_NAME', numvar='ECONOMIC', 
         options=list(region='US', colors='[0xA36685, 0x470024]', 
         dataMode='regions', height=350, width=600));
     plot(Geo1);
 ```
-Texas was the hardest hit with a total of $19.5 Billion in combined property and crop damage from JAN 1950 through NOV 2011.
+Figure 1.1: Texas was the hardest hit with a total of $19.5 Billion in combined property and crop damage from JAN 1950 through NOV 2011.
  
  
 ```{r EconomicsImpactGraph, include=T, echo=T, results='asis'}
@@ -112,7 +121,7 @@ Texas was the hardest hit with a total of $19.5 Billion in combined property and
 
 #   Top 5 EVTYPE
     ECONOMIC <- head(ECONOMIC_TX[order(-ECONOMIC_TX$ECONOMIC), ], n=5);
-    
+
     g1 <- ggplot(data=ECONOMIC, aes(x="", y=ECONOMIC/sum(ECONOMIC), fill=EVTYPE))
     g1 <- g1 + geom_bar(width=.5, stat="identity")
     g1 <- g1 + ggtitle("Top 5 Event Types Affecting Property") 
@@ -120,7 +129,7 @@ Texas was the hardest hit with a total of $19.5 Billion in combined property and
     g1
 ```
 
-The top five (5) severe weather events responsible well over 80% of the total amount of property in the state of Texas: 1) Hail, 2) Flood, 3) Flash Flood, 4) Wild Fire, and 5) TSTM Wind.
+Figure 1.2: The top five severe weather events responsible well over 80% of the total amount of property in the state of Texas: 1) Hail, 2) Flood, 3) Flash Flood, 4) Wild Fire, and 5) TSTM Wind.
  
  
 ###Population Health
@@ -129,14 +138,15 @@ Total Number of Injuries & Fatalities
 #   Aggregate Population Health Data by State
     StormData_HEALTH <- ddply(StormData, "STATE_NAME", summarise, HEALTH=sum(HEALTH, 
         na.rm= T));
-    
+
+#   Geographic Representation of Population Health Data by State
     Geo2 <- gvisGeoMap(StormData_HEALTH, locationvar='STATE_NAME', numvar='HEALTH', 
         options=list(region='US', colors='[0x8080E6, 0x000052]', 
         dataMode='regions', height=350, width=600));
     plot(Geo2);
 ```
 
-Again, Texas was the hardest hit with a total of 19,033 in the number of injuries and fatalities from JAN 1950 through NOV 2011.
+Figure 2.1: Again, Texas was the hardest hit with a total of 19,033 in the number of injuries and fatalities from JAN 1950 through NOV 2011.
  
  
 ```{r PopulationHealthGraph, include=T, echo=T, results='asis'}
@@ -155,9 +165,9 @@ Again, Texas was the hardest hit with a total of 19,033 in the number of injurie
     g2
 ```
 
-The top five (5) severe weather events attributed to well over 80% of the total number fatalities and injuries occuring in the state of Texas: 1) Tornado, 2) Flood, 3) Flash Flood, 4) Heat, and 5) TSTM Wind.
- 
- 
+Figure 2.2: The top five severe weather events attributed to well over 80% of the total number fatalities and injuries occuring in the state of Texas: 1) Tornado, 2) Flood, 3) Flash Flood, 4) Heat, and 5) TSTM Wind.
+
+
 Note:
 The scope of this analysis does not include US territories, such as the Virgin Islands or Guam, as severe weather events in these areas represent less than 2% of the overall the property dammage, injury, and fatality statistics contained in the NOAA Storm Events Database.
 ```{r echo=F}
