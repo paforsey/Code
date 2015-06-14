@@ -158,7 +158,7 @@ Again, Texas was the hardest hit with a total of 19,033 in the number of injurie
 The top five (5) severe weather events attributed to well over 80% of the total number fatalities and injuries occuring in the state of Texas: 1) Tornado, 2) Flood, 3) Flash Flood, 4) Heat, and 5) TSTM Wind.
  
  
-Notes:
+Note:
 The scope of this analysis does not include US territories, such as Guam and the Virgin Islands, as they represent less than 2% of the overall effect of severe weather events.
 ```{r echo=F}
     options(op);
