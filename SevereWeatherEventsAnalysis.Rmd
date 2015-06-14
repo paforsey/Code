@@ -10,9 +10,7 @@ output: html_document
 
 ##Synopsis
 
-This report explores the NOAA Storm Events Database in an attempt to determine which types of severe weather events are most harmful in terms of not only property damage, buth population health as well.  The purpose of this report is to provide government or municipal manager(s) with a enough information to make informed decisions as it pertains to effectively allocating limited resources.
-
-The events in the database start in the year 1950 and end in November 2011.
+This report explores the NOAA Storm Events Database in an attempt to determine which types of severe weather events are most harmful in terms of not only property, but population health as well.  The purpose of this report is to provide government or municipal manager(s) with a enough information to make informed decisions as it pertains to effectively allocating limited resources.
 
 [Findings...]
 
@@ -49,11 +47,13 @@ The events in the database start in the year 1950 and end in November 2011.
 #   Reading NOAA Data from CSV File
     NOAA_Full <- read.csv("StormData.csv", na.strings=c("","  ", "NA"),
         header=TRUE, sep=",", stringsAsFactors=FALSE, strip.white=TRUE, comment.char="",
-        quote = '\"')[,1:35];
+        quote = '\"')[,1:35];  # Dropping Last Two Variables
+    
     dim(NOAA_Full);
         
 #   Appending State Names to Dataset
     StateNames <- suppressWarnings(read.csv("states.csv"));
+    
     dim(StateNames);
 
     StormDataFull <- merge(x=NOAA_Full, y=StateNames, by="STATE", all.x=T);
@@ -66,8 +66,16 @@ The events in the database start in the year 1950 and end in November 2011.
     StormDataFull$CROP_SCALE[StormDataFull$CROPDMGEXP=="M"] <- 1000;
     StormDataFull$CROP_SCALE[StormDataFull$CROPDMGEXP=="K"] <- 1;
     StormDataFull$CROP_SCALE[is.na(StormDataFull$CROPDMGEXP)==T] <- 1;
+```
 
-#   Scaling and Combing Values for Property & Crop Damage 
+
+###Property & Population Health
+Severe weather events are evaluated in terms of their impact on both property and population health.  These quantitative measures are defined as follows:
+
+Economic Impact = Amount of Property Damage ($) + Amount of Crop Damage ($)
+Population Health = Number of Injuries (#) + Number of Fatalities (#)
+````{r}
+#   Scaling and Grouping Values for Property & Crop Damage 
     StormDataFull$ECONOMIC <- (StormDataFull$PROPDMG * StormDataFull$PROP_SCALE) + 
         (StormDataFull$CROPDMG * StormDataFull$CROP_SCALE);
 
@@ -78,12 +86,13 @@ The events in the database start in the year 1950 and end in November 2011.
     StormData <- StormDataFull[, c("STATE_NAME", "EVTYPE", "ECONOMIC", "HEALTH")];
     
 #   Aggregate Data by State
-    StormData_ECONOMIC <- ddply(StormData, "STATE_NAME", summarise, ECONOMIC=sum(ECONOMIC, 
-        na.rm=T)/1000000);
+    StormData_ECONOMIC <- ddply(StormData, "STATE_NAME", summarise, 
+        ECONOMIC=sum(ECONOMIC, na.rm=T)/1000000);  # Round to Billions
+    StormData_ECONOMIC$ECONOMIC <- round(StormData_ECONOMIC$ECONOMIC, digits=2);
     StormData_HEALTH <- ddply(StormData, "STATE_NAME", summarise, HEALTH=sum(HEALTH, 
         na.rm= T));
 
-#   Narrow Scope to Texas
+#   Narrow Scope to Most Effected State: Texas
     ECONOMIC_TX_FULL <- subset(StormData, STATE_NAME=="Texas");
     ECONOMIC_TX <- ddply(ECONOMIC_TX_FULL, .(STATE_NAME, EVTYPE), summarise, 
         ECONOMIC=sum(ECONOMIC));
@@ -99,13 +108,14 @@ The events in the database start in the year 1950 and end in November 2011.
 
 
 ###Economic Impact
-
-```{r EconomicsImpactMap, include=T, echo=T, results='asis', tidy=F}
+Total Property Damage ($ Billions)
+```{r EconomicsImpactMap, include=T, echo=F, results='asis', tidy=F}
     Geo1 <- gvisGeoMap(StormData_ECONOMIC, locationvar='STATE_NAME', numvar='ECONOMIC', 
         options=list(region='US', colors='[0xA36685, 0x470024]', 
         dataMode='regions', height=350, width=600));
     plot(Geo1);
 ```
+Texas was the hardest hit with a combined total of $19.5 Billion in combined property and crop damage from JAN 1950 through NOV 2011.
 
 ```{r EconomicsImpactGraph, include=T, echo=T, results='asis', tidy=F}
     g1 <- ggplot(data=ECONOMIC, aes(x="", y=ECONOMIC/sum(ECONOMIC), fill=EVTYPE))
@@ -117,8 +127,8 @@ The events in the database start in the year 1950 and end in November 2011.
 
 
 ###Population Health
-
-```{r PopulationHealthMap, include=T, echo=T, results='asis', tidy=F}
+Total Number of Injuries & Fatalities (#)
+```{r PopulationHealthMap, include=T, echo=F, results='asis', tidy=F}
     Geo2 <- gvisGeoMap(StormData_HEALTH, locationvar='STATE_NAME', numvar='HEALTH', 
         options=list(region='US', colors='[0x8080E6, 0x000052]', 
         dataMode='regions', height=350, width=600));
