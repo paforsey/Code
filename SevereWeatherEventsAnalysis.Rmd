@@ -72,7 +72,7 @@ This report explores the NOAA Storm Events Database in an attempt to determine w
 ###Property & Population Health
 Severe weather events are evaluated in terms of their impact on both property and population health.  These quantitative measures are defined as follows:
 
-Economic Impact = Amount of Property Damage ($) + Amount of Crop Damage ($)
+Total Property Damage = Amount of Property Damage ($) + Amount of Crop Damage ($)
 Population Health = Number of Injuries (#) + Number of Fatalities (#)
 ````{r}
 #   Scaling and Grouping Values for Property & Crop Damage 
