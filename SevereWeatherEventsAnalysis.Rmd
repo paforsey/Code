@@ -47,8 +47,6 @@ The events in the database start in the year 1950 and end in November 2011.
     knitr::opts_chunk$set(cache=T);
 
 #   Reading NOAA Data from CSV File
-    tidy.opts=list(blank=F, width.cutoff=60);
-    options(width = 60, scipen = 10);
     NOAA_Full <- read.csv("StormData.csv", na.strings=c("","  ", "NA"),
         header=TRUE, sep=",", stringsAsFactors=FALSE, strip.white=TRUE, comment.char="",
         quote = '\"')[,1:35];
@@ -81,7 +79,7 @@ The events in the database start in the year 1950 and end in November 2011.
     
 #   Aggregate Data by State
     StormData_ECONOMIC <- ddply(StormData, "STATE_NAME", summarise, ECONOMIC=sum(ECONOMIC, 
-        na.rm=T));
+        na.rm=T)/1000000);
     StormData_HEALTH <- ddply(StormData, "STATE_NAME", summarise, HEALTH=sum(HEALTH, 
         na.rm= T));
 
@@ -104,7 +102,7 @@ The events in the database start in the year 1950 and end in November 2011.
 
 ```{r EconomicsImpactMap, include=T, echo=T, results='asis', tidy=F}
     Geo1 <- gvisGeoMap(StormData_ECONOMIC, locationvar='STATE_NAME', numvar='ECONOMIC', 
-        options=list(region='US', colors='[0xFF8747, 0xFFB581, 0xc06000]', 
+        options=list(region='US', colors='[0xA36685, 0x470024]', 
         dataMode='regions', height=350, width=600));
     plot(Geo1);
 ```
@@ -122,7 +120,7 @@ The events in the database start in the year 1950 and end in November 2011.
 
 ```{r PopulationHealthMap, include=T, echo=T, results='asis', tidy=F}
     Geo2 <- gvisGeoMap(StormData_HEALTH, locationvar='STATE_NAME', numvar='HEALTH', 
-        options=list(region='US', colors='[0xFF8747, 0xFFB581, 0xc06000]', 
+        options=list(region='US', colors='[0x8080E6, 0x000052]', 
         dataMode='regions', height=350, width=600));
     plot(Geo2);
 ```
