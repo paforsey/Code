@@ -12,9 +12,9 @@ output: html_document
 
 This report explores the NOAA Storm Events Database in an attempt to determine which types of severe weather events are most harmful in terms of not only property, but population health as well.  The purpose of this report is to provide government or municipal manager(s) with a enough information to make informed decisions as it pertains to effectively allocating limited resources.
 
-[Findings...]
-
-
+Analysis revealed that the state of Texas was most affected by severe weather events from JAN 1950 through NOV 2011.  During this period of time, the state experienced approximately $19.5 Billion in property damage and more than 19,033 injuries and fatalities that can be directly attributed to Tornado, Hail, Flood, Flash Flood, Wild Fire, Heat, and TSTM Wind. 
+ 
+ 
 ```{r Libraries, include=F, eval=T, echo=F}
     suppressWarnings(library(ggplot2));
     suppressWarnings(library(dplyr));
@@ -28,8 +28,8 @@ This report explores the NOAA Storm Events Database in an attempt to determine w
 ```{r echo=F}
     op <- options(gvis.plot.tag='chart');
 ```
-
-
+ 
+ 
 ###Download & Uncompress Dataset
 ```{r DownloadData, eval=F, echo=T}
     knitr::opts_chunk$set(cache=T);
@@ -40,8 +40,8 @@ This report explores the NOAA Storm Events Database in an attempt to determine w
     download(csv, "repdata-data-StormData.csv.bz2", mode="wb");
     bunzip2("repdata-data-StormData.csv.bz2", "StormData.csv", overwrite=T);
 ```
-
-
+ 
+ 
 ###Read CSV File & Process Data
 ```{r ReadProcessCSV, eval=T, echo=T, cache=T}
 
@@ -67,8 +67,8 @@ This report explores the NOAA Storm Events Database in an attempt to determine w
     StormDataFull$CROP_SCALE[StormDataFull$CROPDMGEXP=="K"] <- 1;
     StormDataFull$CROP_SCALE[is.na(StormDataFull$CROPDMGEXP)==T] <- 1;
 ```
-
-
+ 
+ 
 ###Severe Weather Impact on Property & Population Health
 Severe weather events are evaluated in terms of their impact on both property and population health.  These quantitative measures are defined as follows:
 
@@ -86,8 +86,8 @@ Population Health = Number of Injuries + Number of Fatalities
 #   Narrow Scope of Dataset
     StormData <- StormDataFull[, c("STATE_NAME", "EVTYPE", "ECONOMIC", "HEALTH")];
 ```
-
-
+ 
+ 
 ###Economic Impact
 Total Property Damage ($ Billions)
 ```{r EconomicsImpactMap, include=T, echo=T, results='asis'}
@@ -102,8 +102,8 @@ Total Property Damage ($ Billions)
     plot(Geo1);
 ```
 Texas was the hardest hit with a total of $19.5 Billion in combined property and crop damage from JAN 1950 through NOV 2011.
-
-
+ 
+ 
 ```{r EconomicsImpactGraph, include=T, echo=T, results='asis'}
 #   Narrow Scope to Most Effected State: Texas
     ECONOMIC_TX_FULL <- subset(StormData, STATE_NAME=="Texas");
@@ -120,9 +120,9 @@ Texas was the hardest hit with a total of $19.5 Billion in combined property and
     g1
 ```
 
-The top five (5) extreme weather events responsible well over 80% of the total amount of property in the state of Texas: 1) Hail, 2) Flood, 3) Flash Flood, 4) Wild Fire, and 5) TSTM Wind.
-
-
+The top five (5) severe weather events responsible well over 80% of the total amount of property in the state of Texas: 1) Hail, 2) Flood, 3) Flash Flood, 4) Wild Fire, and 5) TSTM Wind.
+ 
+ 
 ###Population Health
 Total Number of Injuries & Fatalities
 ```{r PopulationHealthMap, include=T, echo=T, results='asis'}
@@ -137,8 +137,8 @@ Total Number of Injuries & Fatalities
 ```
 
 Again, Texas was the hardest hit with a total of 19,033 in the number of injuries and fatalities from JAN 1950 through NOV 2011.
-
-
+ 
+ 
 ```{r PopulationHealthGraph, include=T, echo=T, results='asis'}
 #   Narrow Scope to Most Effected State: Texas
     HEALTH_TX_FULL <- subset(StormData, STATE_NAME=="Texas");
@@ -155,8 +155,11 @@ Again, Texas was the hardest hit with a total of 19,033 in the number of injurie
     g2
 ```
 
-The top five (5) extreme weather events attributed to well over 80% of the total number fatalities and injuries occuring in the state of Texas: 1) Tornado, 2) Flood, 3) Flash Flood, 4) Heat, and 5) TSTM Wind.
-
+The top five (5) severe weather events attributed to well over 80% of the total number fatalities and injuries occuring in the state of Texas: 1) Tornado, 2) Flood, 3) Flash Flood, 4) Heat, and 5) TSTM Wind.
+ 
+ 
+Notes:
+The scope of this analysis does not include US territories, such as Guam and the Virgin Islands, as they represent less than 2% of the overall effect of severe weather events.
 ```{r echo=F}
     options(op);
 ```
