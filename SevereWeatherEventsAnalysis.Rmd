@@ -12,7 +12,7 @@ output: html_document
   
 This report explores the NOAA Storm Events Database in an attempt to determine which types of severe weather events are most harmful in terms of not only property, but population health as well.  The purpose of this report is to provide government or municipal manager(s) with a enough information to make informed decisions as it pertains to effectively allocating limited resources.
   
-Analysis revealed that the severe weather event most harmful to both property and population health was Tornado.  The overall impact was approximately $51.99 billion in property damage and almost 97,000 injuries and fatalities occurring from JAN 1950 through NOV 2011.  During this period of time, the state most affected was Texas with approximately $19.5 billion in property damage and more than 19,000 injuries and fatalities. 
+Analysis revealed that the severe weather event most harmful to both property and population health was Tornado.  The overall impact was approximately $51.99 billion in property damage and almost 97,000 injuries and fatalities occurring from JAN 1950 through NOV 2011.  The state most affected was Texas with approximately $19.5 billion in property damage and more than 19,000 injuries and fatalities.  
   
    
 ```{r Libraries, include=F, eval=T, echo=F}
@@ -31,7 +31,6 @@ Analysis revealed that the severe weather event most harmful to both property an
    
    
 ##Data Processing
-describes how the data were loaded into R and processed for analysis
 ```{r DataProcessing, eval=F, echo=T}
     knitr::opts_chunk$set(cache=T);
 
@@ -105,7 +104,7 @@ Total Amount of Property Damage
     Column1 <- gvisColumnChart(ECONOMIC,
         options=list(legend='none', height=350, width=600, 
         title="Property Damage: Top 10 Events", hAxis="{title:'Severe Weather Event'}", 
-        vAxis="{title:'Property Damage ($ Billions)'}"));
+        vAxis="{title:'Property Damage ($ Billions)'}", colors="['#A36685']"));
     plot(Column1);
     
 ```
@@ -147,7 +146,7 @@ Total Number of Injuries & Fatalities
     Column2 <- gvisColumnChart(HEALTH,
         options=list(legend='none', height=350, width=600, 
         title="Population Health: Top 10 Events", hAxis="{title:'Severe Weather Event'}", 
-        vAxis="{title:'Injuries & Fatalities'}"));
+        vAxis="{title:'Injuries & Fatalities'}", colors="['#8080E6']"));
     plot(Column2);
 ```
   
