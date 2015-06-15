@@ -10,7 +10,7 @@ The goal of this project is to investigate the exponential distribution in R and
 ###Seed & Simulation Parameters
 ```{r include=T, eval=T, echo=T}
 #   Seed & Simulation Parameters
-    set.seed(5);
+    set.seed(777);
     sim = 1000;
     sample = 40;
     lambda = 0.2;
