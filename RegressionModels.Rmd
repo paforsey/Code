@@ -8,7 +8,9 @@ Motor Trend magazine is interested in exploring the relationship between a speci
 1. Is an automatic or manual transmission better for MPG?
 2. Quantify the MPG difference between automatic and manual transmissions?
 
-
+Using hypothesis testing and simple linear regression, we can conslude that there is a signficant difference between the mean MPG for automatic and manual transmission cars.  To adjust for other confounding variables such as the weight and quarter mile time (acceleration) of the car, multivariate regression analysis was run to understand the impact of transmission type on MPG.  The final model results indicates that weight and quarter mile time (acceleration) have signficant impact in quantifying the difference of mpg between automatic and manual transmission cars.
+  
+  
 ```{r  LoadLibrary, include=T, eval=T, echo=F}
     library(ggplot2);
 ```
@@ -80,17 +82,13 @@ Motor Trend magazine is interested in exploring the relationship between a speci
 
 ## Appendix
 ```{r Appendix, include=T, eval=T, echo=T}
-    par(mfrow = c(1, 2));
-
 #   Histogram
-    x <- mtcars$mpg;
-    h<-hist(x, breaks=10, col="red", xlab="MPG",
-       main="MPG Histogram");
-    
-    xfit<-seq(min(x), max(x), length=40);
-    yfit<-dnorm(xfit, mean=mean(x), sd=sd(x));
-    yfit <- yfit * diff(h$mids[1:2]) * length(x);
-    lines(xfit, yfit, col="blue", lwd=2);
+    g <- ggplot(mtcars, aes(mtcars$mpg))
+    g <- g + geom_histogram(aes(mpg), binwidth=2, color="black", fill="green", 
+        alpha=.5)
+    g <- g + ggtitle("MPG Histogram") + labs(x="MPG", y="Frequency")
+    g <- g  + theme_bw()
+    g
     
 #   Density Plot
     d <- density(mtcars$mpg);
