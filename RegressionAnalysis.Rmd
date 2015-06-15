@@ -97,7 +97,7 @@ Furthermore, with p-value of 1.55e-09, we can conclude that the multivariate reg
   
   
 #4.0 Conclusion
-Linear regression indicates that vehicles with a manual transmission have an MPG that is on average 7.245 higher than those with automatic transmissions. However, when taking into account the degrees of freedom, transmission type by itself can only explain about 33.85% of the variation in MPG.  Multivariate regression, on the other hand, indicates that the combined effects of transmission type (am), weight (wt), and acceleration (qsect) explains 83.36% of the overall variation in MPG. When taking these additional variables into consideration, it can be said that vehicles with manual transmissions have an MPG that is on average 2.9358 higher MPG than those with automatic transmissions.
+Linear regression indicates that vehicles with a manual transmission have an MPG that is on average 7.245 higher than those with automatic transmissions. However, when taking into account the degrees of freedom, transmission type by itself can only explain about 33.85% of the variation in MPG.  Multivariate regression, on the other hand, indicates that the combined effect of transmission type (am), weight (wt), and acceleration (qsect) explains 83.36% of the overall variation in MPG. When taking these additional variables into consideration, it can be said that vehicles with manual transmissions have an MPG that is on average 2.9358 higher MPG than those with automatic transmissions.
   
   
 #5.0 Appendix
