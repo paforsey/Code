@@ -10,12 +10,10 @@ Motor Trend magazine is interested in exploring the relationship between a speci
 
 Means testing and analysis indicates that vehicles with manual transmissions have a statistically significant higher MPG than those with automatic transmissions.  However, when adjusting for confounding variables such as vehicle weight and engine size, multivariate regression analysis indicates that these additional factors have a significant impact on our ability to quantify the MPG difference between automatic and manual transmissions.  That being said, when taking these additional variables into consideration, it can be said that vehicles with manual transmissions have an MPG that is on average 2.9358 higher MPG than those with automatic transmissions.
   
-  
 ```{r  LoadLibrary, include=T, eval=T, echo=F}
     suppressWarnings(library(ggplot2));
 ```
-
-
+  
 ##1.0 Data Processing
 The dataset used for this analysis was obtained from a built-in data frame provided by R Studio; this data frame consists of 11 variables and 32 observations.
 ```{r DataProcessing, include=T, eval=T, echo=T}
@@ -27,22 +25,17 @@ The dataset used for this analysis was obtained from a built-in data frame provi
     names(mtcars);
 ```
   
-  
 ##2.0 Exploratory Analysis
 A following box plot was created to examine the relationship between MPG and transmission type.  The distribution of MPG appears to be normal with no apparent outliers.  Exploratory analysis indicates that vehicles with manual transmissions have a higher mean MPG than those with automatic transmissions.
 ```{r BoxPlot, include=T, eval=T, echo=T}
 #   Box Plot: MPG vs Transmission Type
-    boxplot(mpg~am, data=mtcars, col=c("blue", "green"),
-        xlab="Transmission Type", ylab="MPG",
-        main="MPG & Transmission Type",
-        names=c("Automatic", "Manual")
-    );
+    par(mfrow = c(1,2));
+    boxplot(mpg~am, data=mtcars, col=c("blue", "green"), ylab="MPG",
+        main="MPG & Transmission Type", names=c("Automatic", "Manual"));
 ```
-
-
+  
 ###2.1 Means Testing & Analysis
 Vehicles with a manual transmission have a mean MPG 7.24 higher than those with an automatic transmission. A two sample t-test provides an estimated p-value approximately equal to .0013.  At a 95% confidence level, the difference between transmissions is statistically significant.
-  
 ```{r MeansTest, include=T, eval=T, echo=T}
 #   Aggregate Data & Calculated Mean for MPG & Transmission Type
     Mean <- aggregate(mpg~am, data=mtcars, mean);
@@ -54,22 +47,18 @@ Vehicles with a manual transmission have a mean MPG 7.24 higher than those with 
     MeansTest <- t.test(Automatic$mpg, Manual$mpg);
     MeansTest[3];
 ```
-
-
+  
 ###2.2 Correlation Analysis
 The following correlation matrix quantifies the relationship between MPG and Transmission Type as well as the other variables in the dataset.  Correlation analysis indicates that MPG has a fairly strong negative correlation with cyl, disp, hp, and wt.
-  
 ```{r CorAnalysis, include=T, eval=T, echo=T}
 #   Correlation "mpg" Relative to Remaining Variables
     CorMatrix <- cor(mtcars)[1, ];
     CorMatrix;
 ```
-
-
-##3.0 Model
+  
+##3.0 Regression Analysis
 ###3.1 Linear Regression
 Linear regression indicates that vehicles with a manual transmission have an MPG that is on average 7.245 higher than those with automatic transmissions. The adjusted r-square indicates that when taking into account the degrees of freedom, transmission type explains roughly 33.85% of the variation in MPG; the remaining 66.15% can be attributed to other factors.  That being said, a multivariate regression should help to identify these other factors in order to "quantify the MPG difference between automatic and manual transmissions."
-  
 ```{r LRegression, include=T, eval=T, echo=T}
 #   Linear Regression
     LRegression <- lm(mpg~am, data=mtcars);
@@ -79,7 +68,6 @@ Linear regression indicates that vehicles with a manual transmission have an MPG
 
 ###3.2 Multivariate Regression
 This shows that in addition to transmission type (am), weight (wt), and acceleration  (qsec) are statistically significant explanatory variables. The adjusted R-squared indicates that the model explains approximately 83.36% of the overall variation in MPG.
-  
 ```{r MRegression, include=T, eval=T, echo=T}
 #   Stepwise Multivariate Regression
     MRegression <- step(lm(data=mtcars, mpg ~ .), trace=0, steps=10000);
@@ -87,20 +75,16 @@ This shows that in addition to transmission type (am), weight (wt), and accelera
 ```
 
 Furthermore, with p-value of 1.55e-09, we can conclude that the multivariate regression model is significantly different from the linear regression model.
-  
 ```{r Comparison, include=T, eval=T, echo=T}
 #   Comparison: Linear vs Multivariate Regression
     anova(LRegression, MRegression);
 ```
   
-  
 #4.0 Conclusion
 Linear regression indicates that vehicles with a manual transmission have an MPG that is on average 7.245 higher than those with automatic transmissions. However, when taking into account the degrees of freedom, transmission type by itself can only explain about 33.85% of the variation in MPG.  Multivariate regression, on the other hand, indicates that the combined effect of transmission type (am), weight (wt), and acceleration (qsect) explains 83.36% of the overall variation in MPG. When taking these additional variables into consideration, it can be said that vehicles with manual transmissions have an MPG that is on average 2.9358 higher MPG than those with automatic transmissions.
   
-  
 #5.0 Appendix
-##Appendix 1: MPG Distribution & Density Plot
-  
+###Appendix 1: MPG Distribution & Density Plot
 ```{r Appendix1, include=T, eval=T, echo=T}
 #   MGP Histogram
     g <- ggplot(mtcars, aes(x=mtcars$mpg))
@@ -111,14 +95,13 @@ Linear regression indicates that vehicles with a manual transmission have an MPG
     g
 
 #   Density Plot
+    par(mfrow = c(1,2));
     dPlot <- density(mtcars$mpg);
     plot(dPlot, xlab="MPG", ylab="Density", main="MPG Density Plot", col="blue", lwd=2);
 ```
-
   
-##Appendix 2: Residuals Diagnostics
+###Appendix 2: Residuals Diagnostics
 The residuals analysis indicates normality and no evidence of heteroskedasticity.
-  
 ```{r Appendix2, include=T, eval=T, echo=T}
 #   Plots: Residuals vs Fitted, Scale-Location, Normal Q-Q, & Residuals vs Leverage
     par(mfrow = c(2,2));
