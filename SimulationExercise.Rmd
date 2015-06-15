@@ -18,7 +18,7 @@ The goal of this project is to investigate the exponential distribution in R and
   
 ###1. Show the sample mean and compare it to the theoretical mean of the distribution.
   
-The sample mean of the 1,000 simulated means is 5.043053.  This is extremely close to theoretical mean of the distribution, which is 1/lambda = 1/0.20 = 5.  
+The sample mean of the 1,000 simulated means is 4.969789.  This is extremely close to theoretical mean of the distribution, which is 1/lambda = 1/0.20 = 5.  
 ```{r include=T, eval=T, echo=T}
 #   Simulated Means
     simulatedMean <- replicate(sim, mean(rexp(sample, rate=lambda)));
@@ -29,7 +29,7 @@ The sample mean of the 1,000 simulated means is 5.043053.  This is extremely clo
 
 ###2. Show how variable the sample is (via variance) and compare it to the theoretical variance of the distribution.
   
-The sample variance is 0.6026047 is very similar to the theoretical distribution which is 0.625.  
+The sample variance is 0.6384832.  This is fairly close to the theoretical distribution, which is 0.625.  
 ```{r include=T, eval=T, echo=T}
 #   Sample Variance  
     sampleVariance <- var(simulatedMean);  sampleVariance;
