@@ -1,40 +1,32 @@
----
-title: "MPG & Transmission Type Analysis"
-output: html_document
----
-##Executive Summary
-Motor Trend magazine is interested in exploring the relationship between a specific set of variables and mpg; they are particularly interested in the following:
-
-1. Is an automatic or manual transmission better for MPG?
-2. Quantify the MPG difference between automatic and manual transmissions.
-
-Means testing and analysis indicates that vehicles with manual transmissions have a statistically significant higher MPG than those with automatic transmissions.  However, when adjusting for confounding variables such as vehicle weight and engine size, multivariate regression analysis indicates that these additional factors have a significant impact on our ability to quantify the MPG difference between automatic and manual transmissions.  That being said, when taking these additional variables into consideration, it can be said that vehicles with manual transmissions have an MPG that is on average 2.9358 higher MPG than those with automatic transmissions.
+####Motor Trend Analysis: MPG vs Transmission Type
+####Executive Summary
+Motor Trend magazine is interested in exploring the relationship between a specific set of variables and mpg; they are particularly interested in the following: 1) Is an automatic or manual transmission better for MPG? and 2) Quantify the MPG difference between automatic and manual transmissions.
+  
+Means testing and analysis indicates that vehicles with manual transmissions have a statistically significant higher MPG than those with automatic transmissions.  However, when adjusting for confounding variables such as vehicle weight and engine size, multivariate regression analysis indicates that these additional factors have a significant impact on our ability to quantify the MPG difference between automatic and manual transmissions.  That being said, when taking these additional variables into consideration, it can be said that vehicles with manual transmissions have an MPG that is on average 2.9358 higher MPG than those with automatic transmissions.  
   
 ```{r  LoadLibrary, include=T, eval=T, echo=F}
     suppressWarnings(library(ggplot2));
 ```
   
-##1.0 Data Processing
+####1.0 Data Processing
 The dataset used for this analysis was obtained from a built-in data frame provided by R Studio; this data frame consists of 11 variables and 32 observations.
 ```{r DataProcessing, include=T, eval=T, echo=T}
 #   Set Working Directory
     setwd("~/Data Science/07 Regression Models");
-
 #   Read "mtcars" Data
     data(mtcars);
-    names(mtcars);
 ```
   
-##2.0 Exploratory Analysis
+####2.0 Exploratory Analysis
 A following box plot was created to examine the relationship between MPG and transmission type.  The distribution of MPG appears to be normal with no apparent outliers.  Exploratory analysis indicates that vehicles with manual transmissions have a higher mean MPG than those with automatic transmissions.
-```{r BoxPlot, include=T, eval=T, echo=T}
+  
+```{r BoxPlot, include=T, eval=T, echo=F}
 #   Box Plot: MPG vs Transmission Type
-    par(mfrow = c(1,2));
-    boxplot(mpg~am, data=mtcars, col=c("blue", "green"), ylab="MPG",
-        main="MPG & Transmission Type", names=c("Automatic", "Manual"));
+    boxplot(mpg~am, data=mtcars, col=c("blue", "green"), ylab="MPG", horizontal=T, mar=0,
+        names=c("Automatic", "Manual"));
 ```
   
-###2.1 Means Testing & Analysis
+####2.1 Means Testing & Analysis
 Vehicles with a manual transmission have a mean MPG 7.24 higher than those with an automatic transmission. A two sample t-test provides an estimated p-value approximately equal to .0013.  At a 95% confidence level, the difference between transmissions is statistically significant.
 ```{r MeansTest, include=T, eval=T, echo=T}
 #   Aggregate Data & Calculated Mean for MPG & Transmission Type
@@ -48,7 +40,7 @@ Vehicles with a manual transmission have a mean MPG 7.24 higher than those with 
     MeansTest[3];
 ```
   
-###2.2 Correlation Analysis
+####2.2 Correlation Analysis
 The following correlation matrix quantifies the relationship between MPG and Transmission Type as well as the other variables in the dataset.  Correlation analysis indicates that MPG has a fairly strong negative correlation with cyl, disp, hp, and wt.
 ```{r CorAnalysis, include=T, eval=T, echo=T}
 #   Correlation "mpg" Relative to Remaining Variables
@@ -56,8 +48,8 @@ The following correlation matrix quantifies the relationship between MPG and Tra
     CorMatrix;
 ```
   
-##3.0 Regression Analysis
-###3.1 Linear Regression
+####3.0 Regression Analysis
+####3.1 Linear Regression
 Linear regression indicates that vehicles with a manual transmission have an MPG that is on average 7.245 higher than those with automatic transmissions. The adjusted r-square indicates that when taking into account the degrees of freedom, transmission type explains roughly 33.85% of the variation in MPG; the remaining 66.15% can be attributed to other factors.  That being said, a multivariate regression should help to identify these other factors in order to "quantify the MPG difference between automatic and manual transmissions."
 ```{r LRegression, include=T, eval=T, echo=T}
 #   Linear Regression
@@ -66,7 +58,7 @@ Linear regression indicates that vehicles with a manual transmission have an MPG
 ```
 
 
-###3.2 Multivariate Regression
+####3.2 Multivariate Regression
 This shows that in addition to transmission type (am), weight (wt), and acceleration  (qsec) are statistically significant explanatory variables. The adjusted R-squared indicates that the model explains approximately 83.36% of the overall variation in MPG.
 ```{r MRegression, include=T, eval=T, echo=T}
 #   Stepwise Multivariate Regression
@@ -80,30 +72,23 @@ Furthermore, with p-value of 1.55e-09, we can conclude that the multivariate reg
     anova(LRegression, MRegression);
 ```
   
-#4.0 Conclusion
+####4.0 Conclusion
 Linear regression indicates that vehicles with a manual transmission have an MPG that is on average 7.245 higher than those with automatic transmissions. However, when taking into account the degrees of freedom, transmission type by itself can only explain about 33.85% of the variation in MPG.  Multivariate regression, on the other hand, indicates that the combined effect of transmission type (am), weight (wt), and acceleration (qsect) explains 83.36% of the overall variation in MPG. When taking these additional variables into consideration, it can be said that vehicles with manual transmissions have an MPG that is on average 2.9358 higher MPG than those with automatic transmissions.
   
-#5.0 Appendix
-###Appendix 1: MPG Distribution & Density Plot
-```{r Appendix1, include=T, eval=T, echo=T}
-#   MGP Histogram
-    g <- ggplot(mtcars, aes(x=mtcars$mpg))
-    g <- g + geom_histogram(aes(mpg), binwidth=2, color="black", fill="green", 
-        alpha=.5)
-    g <- g + ggtitle("MPG Histogram") + labs(x="MPG", y="Frequency")
-    g <- g  + theme_bw()
-    g
-
-#   Density Plot
+####5.0 Appendix
+####Appendix 1: MPG Distribution & Density Plot
+```{r Appendix1, include=T, eval=T, echo=F}
+#   MGP Histogram & Density Plot
     par(mfrow = c(1,2));
+    h<-hist(mtcars$mpg, breaks=10, col="green", xlab="", main="MPG Histogram");
     dPlot <- density(mtcars$mpg);
-    plot(dPlot, xlab="MPG", ylab="Density", main="MPG Density Plot", col="blue", lwd=2);
+    plot(dPlot, xlab="", ylab="Density", main="MPG Density Plot", col="blue", lwd=2);
 ```
   
-###Appendix 2: Residuals Diagnostics
+####Appendix 2: Residuals Diagnostics
 The residuals analysis indicates normality and no evidence of heteroskedasticity.
-```{r Appendix2, include=T, eval=T, echo=T}
+```{r Appendix2, include=T, eval=T, echo=F}
 #   Plots: Residuals vs Fitted, Scale-Location, Normal Q-Q, & Residuals vs Leverage
     par(mfrow = c(2,2));
-    plot(MRegression);
+    plot(MRegression, mar=0);
 ```
