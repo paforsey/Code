@@ -1,6 +1,6 @@
 ---
 title: "MPG & Transmission Type Analysis"
-output: html_document
+output: pdf_document
 ---
 ##Executive Summary
 Motor Trend magazine is interested in exploring the relationship between a specific set of variables and mpg; they are particularly interested in the following:
@@ -131,7 +131,7 @@ Linear regression indicates that vehicles with a manual transmission have an MPG
 ```
 
   
-##Appendix 4: Residuals Analysis
+##Appendix 4: Residuals Diagnostics
 The residuals analysis indicates normality and no evidence of heteroskedasticity.
   
 ```{r Appendix4, include=T, eval=T, echo=T}
