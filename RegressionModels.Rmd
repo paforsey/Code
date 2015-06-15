@@ -60,7 +60,7 @@ Using hypothesis testing and simple linear regression, we can conslude that ther
 ```
 
 
-##Model
+##Single & Multivariate Analysis
 ###Linear Regression
 ```{r LRegression, include=T, eval=T, echo=T}
 #   Linear Regression
