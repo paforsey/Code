@@ -1,0 +1,56 @@
+##Simulation Exercise
+  
+###Overview
+The goal of this project is to investigate the exponential distribution in R and compare it with the Central Limit Theorem.  The exponential distribution can be simulated in R with rexp(n, lambda) where lambda is the rate parameter.  The mean of exponential distribution is 1/lambda and the standard deviation is also 1/lambda.  lambda = 0.2 for all of the simulations.  The distribution of averages of 40 exponentials will be investigated using 1,000 simulations.  
+  
+###Seed & Simulation Parameters
+```{r include=T, eval=T, echo=T}
+#   Seed & Simulation Parameters
+    set.seed(5);
+    sim = 1000;
+    sample = 40;
+    lambda = 0.2;
+```
+  
+###1. Show the sample mean and compare it to the theoretical mean of the distribution.
+  
+The mean of the 1,000 simulated means is 5.043053, which is very close to theoretical mean of the distribution, which is 1/lambda = 1/0.20 = 5.  
+```{r include=T, eval=T, echo=T}
+#   Simulated Means
+    simulatedMean <- replicate(sim, mean(rexp(sample, rate=lambda)));
+
+#   Sample Mean
+    sampleMean <- mean(simulatedMean);  sampleMean;
+```
+
+###2. Show how variable the sample is (via variance) and compare it to the theoretical variance of the distribution.
+  
+The sample variance is 0.6026047 is very similar to the theoretical distribution which is 0.625.  
+```{r include=T, eval=T, echo=T}
+#   Sample Variance  
+    sampleVariance <- var(simulatedMean);  sampleVariance;
+
+#   Theoretical Variance
+    theoreticalVariance = (1/lambda)^2/sample;  theoreticalVariance;
+```
+  
+###3. Show that the distribution is approximately normal.
+  
+The following histogram shows the distribution of means to be "approximately normal.""
+```{r include=T, eval=T, echo=T}
+#   Sample Distribution of Means
+    hist(simulatedMean, prob=T, col="yellow", breaks=50, xlab="Sample mean", 
+         main="Sample Mean Distribution");
+    abline(v=0, col="red", lwd=4)
+    lines(density(simulatedMean, adjust=2), col="blue", lwd=3)
+    legend("topright", pch=12, col=c("red", "blue"), legend = c("Sample Mean Distribution",
+        "Gaussian Approximation"))
+```
+  
+```{r}
+#   Sample Distribution
+    hist(rexp(sample*sim,rate=lambda), prob=T, col="lightgreen", breaks=50, xlab="Sample", 
+         main = "Sample Distribution")
+    lines(density(rexp(sample*sim,rate=lambda), adjust=2), col="darkblue", lwd=3)
+```
+
