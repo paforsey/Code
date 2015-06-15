@@ -1,6 +1,6 @@
 ---
 title: "MPG & Transmission Type Analysis"
-output: pdf_document
+output: html_document
 ---
 ##Executive Summary
 Motor Trend magazine is interested in exploring the relationship between a specific set of variables and mpg; they are particularly interested in the following:
@@ -24,9 +24,7 @@ The dataset used for this analysis was obtained from a built-in data frame provi
 
 #   Read "mtcars" Data
     data(mtcars);
-    dim(mtcars);
-    head(mtcars, n=5);
-    summary(mtcars);
+    names(mtcars);
 ```
   
   
@@ -101,17 +99,9 @@ Linear regression indicates that vehicles with a manual transmission have an MPG
   
   
 #5.0 Appendix
-##Appendix 1: Pairwise Scatterplots
+##Appendix 1: MPG Distribution & Density Plot
   
 ```{r Appendix1, include=T, eval=T, echo=T}
-#   Pairwise Scatterplots
-    pairs(mtcars, panel=panel.smooth, main="Pairwise Scatterplots");
-```
-  
-  
-##Appendix 2: MPG Distribution
-  
-```{r Appendix2, include=T, eval=T, echo=T}
 #   MGP Histogram
     g <- ggplot(mtcars, aes(x=mtcars$mpg))
     g <- g + geom_histogram(aes(mpg), binwidth=2, color="black", fill="green", 
@@ -119,22 +109,18 @@ Linear regression indicates that vehicles with a manual transmission have an MPG
     g <- g + ggtitle("MPG Histogram") + labs(x="MPG", y="Frequency")
     g <- g  + theme_bw()
     g
-```
-  
-  
-##Appendix 3: Density Plot
-  
-```{r Appendix3, include=T, eval=T, echo=T}
+
 #   Density Plot
     dPlot <- density(mtcars$mpg);
     plot(dPlot, xlab="MPG", ylab="Density", main="MPG Density Plot", col="blue", lwd=2);
 ```
 
   
-##Appendix 4: Residuals Diagnostics
+##Appendix 2: Residuals Diagnostics
 The residuals analysis indicates normality and no evidence of heteroskedasticity.
   
-```{r Appendix4, include=T, eval=T, echo=T}
+```{r Appendix2, include=T, eval=T, echo=T}
 #   Plots: Residuals vs Fitted, Scale-Location, Normal Q-Q, & Residuals vs Leverage
+    par(mfrow = c(2,2));
     plot(MRegression);
 ```
