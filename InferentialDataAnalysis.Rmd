@@ -8,7 +8,7 @@
   
 ####1. Load the ToothGrowth data and perform some basic exploratory data analyses.
   
-The boxplot graph appears to indicate that the supplement in OJ results in higher average tooth lenth than the supplement in VC.
+The boxplot graph appears to indicate that the supplement in OJ results in higher average tooth lenth than the supplement in VC.  However, the amount of overlap between the two seems to indicate that the difference may not be statistically significant.
 ```{r Exploratory1, include=T, eval=T, echo=T}
     library(datasets);
 
@@ -48,41 +48,52 @@ The dataset describes the relationship between tooth length and various doses of
 
 ####3. Use confidence intervals and/or hypothesis tests to compare tooth growth by supp and dose. (Only use the techniques from class, even if there's other approaches worth considering).
   
-Test #1: Does the supplement result in increased levels of tooth growth?  
-H0: There is no difference in tooth growth given the supplement.  
-HA: The supplement does result in different levels of tooth growth.  
+Question #1: Does the supplement result in different levels of tooth growth?  
+Test #1  
+H0: There is no difference in tooth growth given the supplement by itself.  
+HA: The supplement by itself results in different levels of tooth growth.  
+Results: p-value = 0.06063 --> Fail to Reject the Null
 ```{r Test1, include=T, eval=T, echo=T}
 #   The Effect of the Supplement on Tooth Growth
     t.test(ToothGrowth$len[ToothGrowth$supp=="OJ"], ToothGrowth$len[ToothGrowth$supp=="VC"],
            con.levle=0.95, paired=F);
 ```
   
-Test #2: Does larger doses result in increased levels of tooth growth?  
+Question #2: Does larger doses result in increased levels of tooth growth?  
 H0: There is no difference in tooth growth given the amount of the dose.  
-HA: Larger doses result in increased levels of tooth growth.  
+HA: Larger doses result in increased levels of tooth growth.
+Results: 
 ```{r Test2, include=T, eval=T, echo=T}
-#   The Effect of Dose on Tooth Growth
-    t.test(ToothGrowth$len[ToothGrowth$dose==0.5], ToothGrowth$len[ToothGrowth$dose==1.0],
+#   ToothGrowth$len[ToothGrowth$dose==1.0] > ToothGrowth$len[ToothGrowth$dose==0.5]
+    t.test(ToothGrowth$len[ToothGrowth$dose==1.0], ToothGrowth$len[ToothGrowth$dose==0.5],
            con.levle=0.95, paired=F);
-
-    t.test(ToothGrowth$len[ToothGrowth$dose==0.5], ToothGrowth$len[ToothGrowth$dose==2.0],
+#   ToothGrowth$len[ToothGrowth$dose==2.0] > ToothGrowth$len[ToothGrowth$dose==0.5]
+    t.test(ToothGrowth$len[ToothGrowth$dose==2.0], ToothGrowth$len[ToothGrowth$dose==0.5],
            con.levle=0.95, paired=F);
-
-    t.test(ToothGrowth$len[ToothGrowth$dose==1.0], ToothGrowth$len[ToothGrowth$dose==2.0],
+#   ToothGrowth$len[ToothGrowth$dose==2.0] > ToothGrowth$len[ToothGrowth$dose==1.0]
+    t.test(ToothGrowth$len[ToothGrowth$dose==2.0], ToothGrowth$len[ToothGrowth$dose==1.0],
            con.levle=0.95, paired=F);
 ```
   
-Test #3: Does combined effects of both the supplement and larger doses result in increased levels of tooth growth?  
+Question #3: Does combined effects of both the supplement and larger doses result in increased levels of tooth growth?  
 H0: There is no difference in tooth growth given the supplement and the amount of the dose.  
 HA: The supplement combined with larger does result in increased levels of tooth growth.  
+Results: 
 ```{r Test3, include=T, eval=T, echo=T}
-#   The Combined Effects of Supplement & Dose on Tooth Growth
-    t.test(ToothGrowth$len[ToothGrowth$supp=="OJ"], ToothGrowth$len[ToothGrowth$supp=="VC"],
-           con.levle=0.95, paired=F);
+#   ToothGrowth$len[ToothGrowth$dose==1.0] > ToothGrowth$len[ToothGrowth$dose==0.5]
+    t.test(ToothGrowth$len[ToothGrowth$supp=="OJ" & ToothGrowth$dose==0.5], 
+        ToothGrowth$len[ToothGrowth$supp=="VC" & ToothGrowth$dose==0.5], 
+        con.levle=0.95, paired=F);
 
+    t.test(ToothGrowth$len[ToothGrowth$supp=="OJ" & ToothGrowth$dose==1.0], 
+        ToothGrowth$len[ToothGrowth$supp=="VC" & ToothGrowth$dose==1.0], 
+        con.levle=0.95, paired=F);
 
-
+    t.test(ToothGrowth$len[ToothGrowth$supp=="OJ" & ToothGrowth$dose==2.0], 
+        ToothGrowth$len[ToothGrowth$supp=="VC" & ToothGrowth$dose==2.0], 
+        con.levle=0.95, paired=F);
 ```
+  
 ####4. State your conclusions and the assumptions needed for your conclusions. 
   
 
