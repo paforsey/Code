@@ -65,15 +65,26 @@ Question #2: Does larger doses result in increased levels of tooth growth?
 Test #1  
 H0: There is no difference in tooth growth given the amount of the dose.  
 HA: Larger doses result in increased levels of tooth growth.
-Results: 
-```{r Test2, include=T, eval=T, echo=T}
-#   ToothGrowth$len[ToothGrowth$dose==1.0] > ToothGrowth$len[ToothGrowth$dose==0.5]
+Results: p-value = 1.268e-07 --> Reject the Null  
+```{r Q2T1, include=T, eval=T, echo=T}
     t.test(ToothGrowth$len[ToothGrowth$dose==1.0], ToothGrowth$len[ToothGrowth$dose==0.5],
            con.levle=0.95, paired=F);
-#   ToothGrowth$len[ToothGrowth$dose==2.0] > ToothGrowth$len[ToothGrowth$dose==0.5]
+```
+  
+Test #2  
+H0: There is no difference in tooth growth given the amount of the dose.  
+HA: Larger doses result in increased levels of tooth growth.
+Results: p-value = 4.398e-14 --> Reject the Null  
+```{r Q2T2, include=T, eval=T, echo=T}
     t.test(ToothGrowth$len[ToothGrowth$dose==2.0], ToothGrowth$len[ToothGrowth$dose==0.5],
            con.levle=0.95, paired=F);
-#   ToothGrowth$len[ToothGrowth$dose==2.0] > ToothGrowth$len[ToothGrowth$dose==1.0]
+```
+  
+Test #3  
+H0: There is no difference in tooth growth given the amount of the dose.  
+HA: Larger doses result in increased levels of tooth growth.
+Results: p-value = 1.906e-05 --> Reject the Null  
+```{r Q2T3, include=T, eval=T, echo=T}
     t.test(ToothGrowth$len[ToothGrowth$dose==2.0], ToothGrowth$len[ToothGrowth$dose==1.0],
            con.levle=0.95, paired=F);
 ```
@@ -83,7 +94,7 @@ Question #3: Does combined effects of both the supplement and larger doses resul
 Test #1  
 H0: There is no difference in tooth growth given the supplement and the amount of the dose.  
 HA: The supplement combined with larger does result in increased levels of tooth growth.  
-Results: 
+Results: p-value = 0.006359 --> Reject the Null 
 ```{r Q3T1, include=T, eval=T, echo=T}
     t.test(ToothGrowth$len[ToothGrowth$supp=="OJ" & ToothGrowth$dose==0.5], 
         ToothGrowth$len[ToothGrowth$supp=="VC" & ToothGrowth$dose==0.5], 
@@ -93,7 +104,7 @@ Results:
 Test #2  
 H0: There is no difference in tooth growth given the supplement and the amount of the dose.  
 HA: The supplement combined with larger does result in increased levels of tooth growth.  
-Results: 
+Results: p-value = 0.001038 --> Reject the Null 
 ```{r Q3T2, include=T, eval=T, echo=T}
     t.test(ToothGrowth$len[ToothGrowth$supp=="OJ" & ToothGrowth$dose==1.0], 
         ToothGrowth$len[ToothGrowth$supp=="VC" & ToothGrowth$dose==1.0], 
@@ -103,7 +114,7 @@ Results:
 Test #3  
 H0: There is no difference in tooth growth given the supplement and the amount of the dose.  
 HA: The supplement combined with larger does result in increased levels of tooth growth.  
-Results: 
+Results: p-value = 0.9639 --> Fail to Reject the Null
 ```{r Q3T3, include=T, eval=T, echo=T}
     t.test(ToothGrowth$len[ToothGrowth$supp=="OJ" & ToothGrowth$dose==2.0], 
         ToothGrowth$len[ToothGrowth$supp=="VC" & ToothGrowth$dose==2.0], 
