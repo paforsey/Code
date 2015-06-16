@@ -1,15 +1,15 @@
 ###Inferential Data Analysis
 
 ```{r include=T, eval=T, echo=F}
-    library(plyr);
-    library(ggplot2);
+    suppressWarnings(library(plyr));
+    suppressWarnings(library(ggplot2));
 ```
   
   
 ####1. Load the ToothGrowth data and perform some basic exploratory data analyses.
   
 The boxplot graph indicates that tooth length and dose are positively correlated; as tooth length increases the dose also increaes.
-```{r Exploratory, include=T, eval=T, echo=F}
+```{r Exploratory, include=T, eval=T, echo=T}
     library(datasets);
     g <- ggplot(ToothGrowth, aes(x=factor(dose), y=len, fill=factor(dose)))
     g <- g + geom_boxplot() + facet_grid(.~supp) 
@@ -20,25 +20,21 @@ The boxplot graph indicates that tooth length and dose are positively correlated
 ####2. Provide a basic summary of the data.
 
 The dataset describes the relationship between tooth length and various doses of vitamin C and absorbic acid (i.e., 0.5mg, 1.0mg, 2.0mg).  Summary of the ToothGrowth dataset is as follows:
-```{r Summary, include=T, eval=T, echo=F}
+```{r Summary, include=T, eval=T, echo=T}
     dim(ToothGrowth);
+    head(ToothGrowth, n=5);
     summary(ToothGrowth);
 ```
 
 ####3. Use confidence intervals and/or hypothesis tests to compare tooth growth by supp and dose. (Only use the techniques from class, even if there's other approaches worth considering).
-```{r Confidence, include=T, eval=T, echo=F}
+```{r Confidence, include=T, eval=T, echo=T}
 
     t.test(x=ToothGrowth$len, y=ToothGrowth$dose, conf.level=0.95, paired=F);
 
-    t.test(ToothGrowth$len[ToothGrowth$supp=="OJ"], ToothGrowth$len[ToothGrowth$supp=="VC"],
-           con.levle=0.95, paird=F);
 
-    alpha <- 0.05;
-    z.half.alpha <- qnorm(1-alpha/2) 
-    c(-z.half.alpha, z.half.alpha)
     t.test(ToothGrowth$len[ToothGrowth$supp=="OJ"], ToothGrowth$len[ToothGrowth$supp=="VC"],
-        paired=T);
-    t.test(ToothGrowth$len, ToothGrowth$dose);
+           con.levle=0.95, paired=T);
+
 
 ```
 
