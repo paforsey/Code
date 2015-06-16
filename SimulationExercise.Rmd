@@ -1,7 +1,7 @@
 ##Simulation Exercise
   
 ###Overview
-The goal of this project is to investigate the exponential distribution in R and compare it with the Central Limit Theorem.  The exponential distribution is simulated in R with rexp(n, lambda) where lambda is the rate parameter.  The mean of exponential distribution is 1/lambda and the standard deviation is also 1/lambda; lambda = 0.2 for all of the simulations.  The distribution of means of 40 exponentials will be investigated using 1,000 simulations.  
+The goal of this project is to investigate the exponential distribution in R and compare it with the Central Limit Theorem.  The exponential distribution is simulated in R with rexp(n, lambda) where lambda is the rate parameter.  The mean of exponential distribution is 1/lambda and the standard deviation is also 1/lambda; lambda = 0.20 for all of the simulations.  The distribution of means of 40 exponentials will be investigated using 1,000 simulations.  
 
 ```{r echo=F}
     library(ggplot2);
@@ -13,17 +13,18 @@ The goal of this project is to investigate the exponential distribution in R and
     set.seed(777);
     sim = 1000;
     sample = 40;
-    lambda = 0.2;
+    lambda = 0.20;
 ```
   
 ###1. Show the sample mean and compare it to the theoretical mean of the distribution.
   
-The sample mean of the 1,000 simulated means is 4.969789.  This is extremely close to theoretical mean of the distribution, which is 1/lambda = 1/0.20 = 5.  
+The sample mean of the 1,000 simulated means is 4.969789.  This is extremely close to theoretical mean of the distribution, 5.  
 ```{r include=T, eval=T, echo=T}
-#   Simulated Means
-    simulatedMean <- replicate(sim, mean(rexp(sample, rate=lambda)));
+#   Theoretical Mean
+    theoreticalMean <- 1/lambda;  theoreticalMean;
 
 #   Sample Mean
+    simulatedMean <- replicate(sim, mean(rexp(sample, rate=lambda)));
     sampleMean <- mean(simulatedMean);  sampleMean;
 ```
 
@@ -36,16 +37,29 @@ The sample variance is 0.6384832.  This is fairly close to the theoretical distr
 
 #   Theoretical Variance
     theoreticalVariance = (1/lambda)^2/sample;  theoreticalVariance;
+    
+# Histogram: Sample vs Theoretical Mean
+    hist(simulatedMean,  freq=T, main="Distribution of Sample Means", 
+         xlab="Sample Means", col="lightblue");
+    abline(v=sampleMean, col='blue', lwd=2, lty=1);
+    abline(v=theoreticalMean, col='red', lwd=2, lty=4);
+    legend('topright', c("Sample Mean", "Theoretical Mean"),
+        col=c("blue", "red"), lwd=c(2, 2), lty=c(1, 4), bty="sim"); 
 ```
   
 ###3. Show that the distribution is approximately normal.
   
-The following histogram shows the distribution of means to be "approximately normal.""
+The following histogram shows the distribution of means to be "approximately normal."
 ```{r include=T, eval=T, echo=T}
-#   Sample Distribution of Means
-    hist(simulatedMean, prob=T, col="lightblue", breaks=50, xlab="Sample mean", 
-         main="Sample Mean Distribution")
-    lines(density(simulatedMean, adjust=2), col="blue", lwd=2)
+#   Histogram: Sample Mean vs Theoretical Mean
+    hist(simulatedMean,  prob=T, main="Distribution of Sample Means", 
+         xlab="Sample Means", col="lightblue");
+    lines(density(simulatedMean), lwd=2, lty=1, col="blue")
+    legend('topright', c("Sample Mean", "Theoretical Mean"), col=c("blue", "red"),
+        lwd=c(2, 2), lty=c(1, 4));
+    xfit <- seq(min(simulatedMean), max(simulatedMean), length=100);
+    yfit <- dnorm(xfit, mean=1/lambda, sd=(1/lambda/sqrt(sample)));
+    lines(xfit, yfit, pch=22, col="red", lwd=2, lty=4);
 ```
 
 
