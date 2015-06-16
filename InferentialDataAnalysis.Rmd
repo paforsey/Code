@@ -89,7 +89,8 @@ Results: p-value = 1.906e-05 --> Reject the Null
            con.levle=0.95, paired=F);
 ```
   
-Question #3: Does combined effects of both the supplement and larger doses result in increased levels of tooth growth?  
+Question #3: Does the supplement given the same dose result in different levels of tooth growth?  
+Different supplements...  
   
 Test #1  
 H0: There is no difference in tooth growth given the supplement and the same dose.  
