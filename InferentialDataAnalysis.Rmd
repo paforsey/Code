@@ -84,16 +84,27 @@ Test #1
 H0: There is no difference in tooth growth given the supplement and the amount of the dose.  
 HA: The supplement combined with larger does result in increased levels of tooth growth.  
 Results: 
-```{r Test3, include=T, eval=T, echo=T}
-#   ToothGrowth$len[ToothGrowth$dose==1.0] > ToothGrowth$len[ToothGrowth$dose==0.5]
+```{r Q3T1, include=T, eval=T, echo=T}
     t.test(ToothGrowth$len[ToothGrowth$supp=="OJ" & ToothGrowth$dose==0.5], 
         ToothGrowth$len[ToothGrowth$supp=="VC" & ToothGrowth$dose==0.5], 
         con.levle=0.95, paired=F);
-
+```
+  
+Test #2  
+H0: There is no difference in tooth growth given the supplement and the amount of the dose.  
+HA: The supplement combined with larger does result in increased levels of tooth growth.  
+Results: 
+```{r Q3T2, include=T, eval=T, echo=T}
     t.test(ToothGrowth$len[ToothGrowth$supp=="OJ" & ToothGrowth$dose==1.0], 
         ToothGrowth$len[ToothGrowth$supp=="VC" & ToothGrowth$dose==1.0], 
         con.levle=0.95, paired=F);
-
+```
+  
+Test #3  
+H0: There is no difference in tooth growth given the supplement and the amount of the dose.  
+HA: The supplement combined with larger does result in increased levels of tooth growth.  
+Results: 
+```{r Q3T3, include=T, eval=T, echo=T}
     t.test(ToothGrowth$len[ToothGrowth$supp=="OJ" & ToothGrowth$dose==2.0], 
         ToothGrowth$len[ToothGrowth$supp=="VC" & ToothGrowth$dose==2.0], 
         con.levle=0.95, paired=F);
