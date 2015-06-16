@@ -27,12 +27,19 @@ The dataset describes the relationship between tooth length and various doses of
 
 ####3. Use confidence intervals and/or hypothesis tests to compare tooth growth by supp and dose. (Only use the techniques from class, even if there's other approaches worth considering).
 ```{r Confidence, include=T, eval=T, echo=F}
+
+    t.test(x=ToothGrowth$len, y=ToothGrowth$dose, conf.level=0.95, paired=F);
+
+    t.test(ToothGrowth$len[ToothGrowth$supp=="OJ"], ToothGrowth$len[ToothGrowth$supp=="VC"],
+           con.levle=0.95, paird=F);
+
     alpha <- 0.05;
     z.half.alpha <- qnorm(1-alpha/2) 
     c(-z.half.alpha, z.half.alpha)
     t.test(ToothGrowth$len[ToothGrowth$supp=="OJ"], ToothGrowth$len[ToothGrowth$supp=="VC"],
         paired=T);
     t.test(ToothGrowth$len, ToothGrowth$dose);
+
 ```
 
 ####4. State your conclusions and the assumptions needed for your conclusions. 
@@ -44,4 +51,3 @@ Hypothesis 1 - The Paired Test: the 95% confidence interval contains the sample 
 Hypothesis 2 - The Welch 2 Sample T-Test: the 95% confidence interval contains the sample mean of the differences between -1.96 to 1.96, the hypothesis cannot be rejected. Therefore, there is sufficient evidence to conclude that increased dosages will effect tooth Growth.
 
 Through the boxplot, it can be concluded that as tooth size increases, the doses tend to be higher. The confidence interval is (-0.171, 7.571). The hypothesis test has been performed taking paired as FALSE.
-
