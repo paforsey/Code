@@ -1,0 +1,47 @@
+##Inferential Data Analysis
+
+```{r include=T, eval=T, echo=F}
+    library(plyr);
+    library(ggplot2);
+```
+  
+  
+###1. Load the ToothGrowth data and perform some basic exploratory data analyses.
+  
+The boxplot graph indicates that tooth length and dose are positively correlated; as tooth length increases the dose also increaes.
+```{r Exploratory, include=T, eval=T, echo=F}
+    library(datasets);
+    g <- ggplot(ToothGrowth, aes(x=factor(dose), y=len, fill=factor(dose)))
+    g <- g + geom_boxplot() + facet_grid(.~supp) 
+    g <- g + ggtitle("Tooth Growth") + labs(x="Dose", y="Tooth Length")
+    g
+```
+  
+###2. Provide a basic summary of the data.
+
+The dataset describes the relationship between tooth length and various doses of vitamin C and absorbic acid (i.e., 0.5mg, 1.0mg, 2.0mg).  Summary of the ToothGrowth dataset is as follows:
+```{r Summary, include=T, eval=T, echo=F}
+    dim(ToothGrowth);
+    summary(ToothGrowth);
+```
+
+###3. Use confidence intervals and/or hypothesis tests to compare tooth growth by supp and dose. (Only use the techniques from class, even if there's other approaches worth considering).
+```{r Confidence, include=T, eval=T, echo=F}
+    alpha <- 0.05;
+    z.half.alpha <- qnorm(1-alpha/2) 
+    c(-z.half.alpha, z.half.alpha)
+    t.test(ToothGrowth$len[ToothGrowth$supp=="OJ"], ToothGrowth$len[ToothGrowth$supp=="VC"],
+        paired=T);
+    t.test(ToothGrowth$len, ToothGrowth$dose);
+```
+
+###4. State your conclusions and the assumptions needed for your conclusions. 
+  
+Due to the values obtained it can be assumed that there is a difference in the growth of the tooth while the doses are larger.  By looking at the boxplot and the assumptions from the hypothesis, the delivery methods are independent of the dose size.
+
+Hypothesis 1 - The Paired Test: the 95% confidence interval contains the sample mean of the differences between -1.96 to 1.96, the hypothesis cannot be rejected. Therefore, there is insufficient evidence to conclude that supplement OJ will works any better than supplement VC,
+
+Hypothesis 2 - The Welch 2 Sample T-Test: the 95% confidence interval contains the sample mean of the differences between -1.96 to 1.96, the hypothesis cannot be rejected. Therefore, there is sufficient evidence to conclude that increased dosages will effect tooth Growth.
+
+Through the boxplot, it can be concluded that as tooth size increases, the doses tend to be higher. The confidence interval is (-0.171, 7.571). The hypothesis test has been performed taking paired as FALSE.
+
