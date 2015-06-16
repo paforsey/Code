@@ -8,21 +8,33 @@
   
 ####1. Load the ToothGrowth data and perform some basic exploratory data analyses.
   
-The boxplot graph indicates that tooth length and dose are positively correlated; as tooth length increases the dose also increase.
-```{r Exploratory, include=T, eval=T, echo=T}
+The boxplot graph appears to indicate that the supplement in OJ results in higher average tooth lenth than the supplement in VC.
+```{r Exploratory1, include=T, eval=T, echo=T}
     library(datasets);
 
 #   The Effect of Dose on Tooth Growth
-    g1 <- ggplot(ToothGrowth, aes(x=factor(dose), y=len, fill=factor(dose)))
+    g1 <- ggplot(ToothGrowth, aes(x=factor(supp), y=len, fill=factor(supp)))
     g1 <- g1 + geom_boxplot() 
-    g1 <- g1 + ggtitle("Tooth Growth vs Dose Only") + labs(x="Dose", y="Tooth Length")
+    g1 <- g1 + ggtitle("Tooth Growth vs Supplement Only") + labs(x="Supplement", y="Tooth Length")
     g1
+```
 
-#   The Combined Effects of Supplement & Dose on Tooth Growth
+The boxplot graph appears to indicate that does and tooth length are positively correlated; as the dose increases tooth length also increases.
+```{r Exploratory2, include=T, eval=T, echo=T}
+#   The Effect of Dose on Tooth Growth
     g2 <- ggplot(ToothGrowth, aes(x=factor(dose), y=len, fill=factor(dose)))
-    g2 <- g2 + geom_boxplot() + facet_grid(.~supp) 
-    g2 <- g2 + ggtitle("Tooth Growth vs Dose by Supplement") + labs(x="Dose", y="Tooth Length")
+    g2 <- g2 + geom_boxplot() 
+    g2 <- g2 + ggtitle("Tooth Growth vs Dose Only") + labs(x="Dose", y="Tooth Length")
     g2
+```
+  
+The boxplot graph indicates that tooth length and dose are positively correlated; as tooth length increases the dose also increase.
+```{r Exploratory3, include=T, eval=T, echo=T}
+#   The Combined Effects of Supplement & Dose on Tooth Growth
+    g3 <- ggplot(ToothGrowth, aes(x=factor(dose), y=len, fill=factor(dose)))
+    g3 <- g3 + geom_boxplot() + facet_grid(.~supp) 
+    g3 <- g3 + ggtitle("Tooth Growth vs Dose by Supplement") + labs(x="Dose", y="Tooth Length")
+    g3
 ```
   
 ####2. Provide a basic summary of the data.
@@ -37,25 +49,35 @@ The dataset describes the relationship between tooth length and various doses of
 ####3. Use confidence intervals and/or hypothesis tests to compare tooth growth by supp and dose. (Only use the techniques from class, even if there's other approaches worth considering).
   
 Test #1: (Non-Paired)  
+Does choice in supplement result in increased levels of tooth growth?  
+H0: There is no difference in tooth growth given the supplement.  
+HA: Larger does result in increased levels of tooth growth.  
+```{r Test1, include=T, eval=T, echo=T}
+#   The Effect of the Supplement on Tooth Growth
+    t.test(ToothGrowth$len[ToothGrowth$supp=="OJ"], ToothGrowth$len[ToothGrowth$supp=="VC"],
+           con.levle=0.95, paired=F);
+
+```
+  
+Test #2: (Non-Paired)  
 Does larger doses result in increased levels of tooth growth?  
 H0: There is no difference in tooth growth given the amount of the dose.  
 HA: Larger does result in increased levels of tooth growth.  
-```{r Test1, include=T, eval=T, echo=T}
+```{r Test2, include=T, eval=T, echo=T}
 #   The Effect of Dose on Tooth Growth
     t.test(x=ToothGrowth$len, y=ToothGrowth$dose, conf.level=0.95, paired=F);
 
 ```
   
-Test #2: (Paired)  
+Test #3: (Paired)  
 Does combined effects of both the supplement and larger doses result in increased levels of tooth growth?  
 H0: There is no difference in tooth growth given the supplement and the amount of the dose.  
 HA: The supplement combined with larger does result in increased levels of tooth growth.  
-```{r Test2, include=T, eval=T, echo=T}
+```{r Test3, include=T, eval=T, echo=T}
 #   The Combined Effects of Supplement & Dose on Tooth Growth
     t.test(ToothGrowth$len[ToothGrowth$supp=="OJ"], ToothGrowth$len[ToothGrowth$supp=="VC"],
            con.levle=0.95, paired=T);
 ```
-
 ####4. State your conclusions and the assumptions needed for your conclusions. 
   
 
