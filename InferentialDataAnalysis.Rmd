@@ -53,7 +53,7 @@ The dataset describes the relationship between tooth length and various doses of
   
 This section compares tooth growth by supp and dose in terms of the following three scenarios: 1) tooth growth by supplement, 2) tooth growth by dose, and 3) tooth growth by supplement and dose.  
   
-Question #1: Is there a difference in levels of tooth growth between supplements?  
+Scenario #1: Is there a difference in levels of tooth growth between supplements?  
 **There is no statistically significant difference in the level of tooth growth between supplements.  See the box plot in Fig 1.1 above and the t-test results below.**  
   
 T-Test #1  
@@ -66,7 +66,7 @@ Results: p-value = 0.06063 --> **Fail to Reject the Null**
            con.levle=0.95, paired=F);
 ```
   
-Question #2: Is there a difference in the level of tooth growth between doses? 
+Scenario #2: Is there a difference in the level of tooth growth between doses? 
 **There is a statistically significant difference in the level of tooth growth between doses.  See the box plot in Fig 1.2 above and the t-test results below.**  
   
 T-Test #1  
@@ -96,7 +96,7 @@ Results: p-value = 1.906e-05 --> **Reject the Null**
            con.levle=0.95, paired=F);
 ```
   
-Question #3: Is there a difference in level of tooth growth between supplements given the same dose?  
+Scenario #3: Is there a difference in level of tooth growth between supplements given the same dose?  
 **There is a statistically significant difference in the level of tooth growth between supplements in OJ and VC for 0.5mg and 1.0mg does.  However, there is no statistically significant difference in the level of tooth growth between supplements in OJ and VC for 2.0mg doses.  See the box plot in Fig 1.3 above and the t-test results below.**   
   
 T-Test #1  
@@ -130,5 +130,12 @@ Results: p-value = 0.9639 --> **Fail to Reject the Null**
 ```
   
 ####4. State your conclusions and the assumptions needed for your conclusions. 
-
+The box plot in Fig 1.3 and the results of each t-test in Scenario #3 support the conclusion that the supplement in OJ (i.e., vitamin C) would on average result in higher levels of tooth growth for 0.5mg and 1.0mg doses.  However, there is <u>no</u> evidence to conclude that either supplement would result in higher levels of tooth growth for a 2.0mg dose.
+  
+<u>Required Assumptions</u>:  
+1. The data are continuous (not discrete).  
+2. The data follow the normal probability distribution.  
+3. The variances of the two populations are equal.  (If not, the Aspin-Welch Unequal-Variance test is used.)  
+4. The two samples are independent; there is no relationship between the individuals in one sample as compared to the other (as there is in the paired t-test).  
+5. Both samples are simple random samples from their respective populations; each individual in the population has an equal probability of being selected in the sample.  
 
