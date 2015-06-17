@@ -20,7 +20,7 @@
     g1
 ```
 
-**Fig 1.2**  The boxplot graph appears to indicate that average tooth growth and dose are positively correlated; as the dose increases, tooth length also increases.  The lack of overlap between the three seems to indicate that the difference may be statistically significant.  
+**Fig 1.2**  The boxplot graph appears to indicate that average tooth growth and dose are positively correlated; as the dose increases, tooth length also increases.  The lack of overlap between the three doses seems to indicate that the difference in growth rate may be statistically significant.  
 ```{r Exploratory2, include=T, eval=T, echo=T}
 #   The Effect of Dose on Tooth Growth
     g2 <- ggplot(ToothGrowth, aes(x=factor(dose), y=len, fill=factor(dose)))
@@ -29,7 +29,7 @@
     g2
 ```
   
-**Fig 1.3**  The boxplot graph appears to indicate that average tooth growth and dose are positively correlated for both supplements; as the dose increases, tooth length also increases.  It is interesting to note that OJ results in higher levels of average tooth growth for the 0.5mg and 1.0mg doses.  However, there appears to be little or no difference for the 2.0mg dose.  
+**Fig 1.3**  The boxplot graph appears to indicate that average tooth growth and dose are positively correlated for both supplements; as the dose increases, tooth length also increases.  However, the supplement in OJ results in higher levels of average tooth growth for the 0.5mg and 1.0mg doses only.  There appears to be little or no difference between the supplments in OJ and VC for the 2.0mg dose.  
 ```{r Exploratory3, include=T, eval=T, echo=T}
 #   The Combined Effects of Supplement & Dose on Tooth Growth
     g3 <- ggplot(ToothGrowth, aes(x=factor(dose), y=len, fill=factor(dose)))
