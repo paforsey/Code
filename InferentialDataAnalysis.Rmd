@@ -56,7 +56,7 @@ This section compares tooth growth by supp and dose in terms of the following th
 Question #1: Is there a difference in levels of tooth growth between supplements?  
 **There is no statistically significant difference in the level of tooth growth between supplements.  See the box plot in Fig 1.1 above and the t-test results below.**  
   
-Test #1  
+T-Test #1  
 H0: **There is no difference in tooth growth given the supplement by itself.**  
 HA: The supplement by itself results in different levels of tooth growth.  
 Results: p-value = 0.06063 --> **Fail to Reject the Null**
@@ -69,7 +69,7 @@ Results: p-value = 0.06063 --> **Fail to Reject the Null**
 Question #2: Is there a difference in the level of tooth growth between doses? 
 **There is a statistically significant difference in the level of tooth growth between doses.  See the box plot in Fig 1.2 above and the t-test results below.**  
   
-Test #1  
+T-Test #1  
 H0: There is no difference in tooth growth given the amount of the dose.  
 HA: **Larger doses result in increased levels of tooth growth.**
 Results: p-value = 1.268e-07 --> **Reject the Null**  
@@ -78,7 +78,7 @@ Results: p-value = 1.268e-07 --> **Reject the Null**
            con.levle=0.95, paired=F);
 ```
   
-Test #2  
+T-Test #2  
 H0: There is no difference in tooth growth given the amount of the dose.  
 HA: **Larger doses result in increased levels of tooth growth.**
 Results: p-value = 4.398e-14 --> **Reject the Null**  
@@ -87,7 +87,7 @@ Results: p-value = 4.398e-14 --> **Reject the Null**
            con.levle=0.95, paired=F);
 ```
   
-Test #3  
+T-Test #3  
 H0: There is no difference in tooth growth given the amount of the dose.  
 HA: **Larger doses result in increased levels of tooth growth.**
 Results: p-value = 1.906e-05 --> **Reject the Null**  
@@ -99,7 +99,7 @@ Results: p-value = 1.906e-05 --> **Reject the Null**
 Question #3: Is there a difference in level of tooth growth between supplements given the same dose?  
 **There is a statistically significant difference in the level of tooth growth between supplements in OJ and VC for 0.5mg and 1.0mg does.  However, there is no statistically significant difference in the level of tooth growth between supplements in OJ and VC for 2.0mg doses.  See the box plot in Fig 1.3 above and the t-test results below.**   
   
-Test #1  
+T-Test #1  
 H0: There is no difference in tooth growth given the supplement and the same dose.  
 HA: **The supplement combined with the same dose results in increased levels of tooth growth.**  
 Results: p-value = 0.006359 --> **Reject the Null** 
@@ -109,7 +109,7 @@ Results: p-value = 0.006359 --> **Reject the Null**
         con.levle=0.95, paired=F);
 ```
   
-Test #2  
+T-Test #2  
 H0: There is no difference in tooth growth given the supplement and the same dose.  
 HA: **The supplement combined with same dose results in increased levels of tooth growth.**  
 Results: p-value = 0.001038 --> **Reject the Null** 
@@ -119,7 +119,7 @@ Results: p-value = 0.001038 --> **Reject the Null**
         con.levle=0.95, paired=F);
 ```
   
-Test #3  
+T-Test #3  
 H0: **There is no difference in tooth growth given the supplement and the same dose.**  
 HA: The supplement combined with same dose results in increased levels of tooth growth.  
 Results: p-value = 0.9639 --> **Fail to Reject the Null**
