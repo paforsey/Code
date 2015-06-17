@@ -51,7 +51,7 @@ The dataset describes the relationship between tooth length and various doses of
 
 ####3. Use confidence intervals and/or hypothesis tests to compare tooth growth by supp and dose. (Only use the techniques from class, even if there's other approaches worth considering).
   
-**This section compares tooth growth by supp and dose in terms of the following three scenarios: 1) tooth growth by supplement, 2) tooth growth by dose, and 3) tooth growth by supplement and dose.**  
+This section compares tooth growth by supp and dose in terms of the following three scenarios: 1) tooth growth by supplement, 2) tooth growth by dose, and 3) tooth growth by supplement and dose.  
   
 Question #1: Is there a difference in levels of tooth growth between supplements?  
 **There is no statistically significant difference in the level of tooth growth between supplements.  See the box plot in Fig 1.1 above and the t-test results below.**  
@@ -67,7 +67,7 @@ Results: p-value = 0.06063 --> **Fail to Reject the Null**
 ```
   
 Question #2: Is there a difference in the level of tooth growth between doses? 
-**There is a statistically significant difference in the level of tooth growth between doses.  There is a positive correlation between the level of tooth growth and the size of each dose; as dose size increases, tooth length increases.  See the box plot in Fig 1.2 above and the t-test results below.**  
+**There is a statistically significant difference in the level of tooth growth between doses.  See the box plot in Fig 1.2 above and the t-test results below.**  
   
 Test #1  
 H0: There is no difference in tooth growth given the amount of the dose.  
