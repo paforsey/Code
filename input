@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+
+<head lang="en">
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
+	<style>
+	</style>
+
+</head>
+
+<body>
+
+	<div class="container">
+	
+  	<div class="row">
+  		<div class="col-sm-3 col-sm-offset-3">
+  			<input id="Email" type="email" class="form-control input-md" placeholder="Email Address" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$">
+  				<span id="ok" class="glyphicon glyphicon-ok form-control-feedback" style="color:green; margin-right:2%; text-align:left; align:middle; visibility:hidden"></span>
+  				<span id="remove" class="glyphicon glyphicon-remove form-control-feedback" style="color:red; margin-right:2%; text-align:left; align:middle; visibility:hidden"></span>
+  			</input>
+  		</div>
+  	</div>
+
+  </div>	
+
+	<script>
+
+		$(document).ready(function(){
+
+			$("#Email").css("border-color", "red");
+			$("#ok").css("visibility", "hidden");
+			$("#remove").css("visibility", "visible");
+
+		});
+
+	</script>
+
+</body>	
+	
+</html>
