@@ -20,17 +20,24 @@
 		<div class="col-sm-3">
 
 			<div id="u1" class="form-group">
-				<input type="text" class="form-control" id="username" pattern=".{4,}" autofocus></input>
-				<span id="u2" class=""></span>
+				<div class="input-group">
+					<span class="input-group-addon"><i class="fa fa-user"></i></span>
+					<input type="text" class="form-control" id="username" placeholder="Email Address" pattern=".{4,}"></input>
+					<a class="input-group-addon" href="" style="background:none; border-left:none;"><i class="fa fa-question"></i></a>
+					<span id="u2" class=""></span>
+				</div>
 			</div>
-
+				
 			<div id="p1" class="form-group">		
-				<input type="password" class="form-control" id="password" pattern=".{4,}"></input>
-				<span id="p2" class=""></span>
+				<div class="input-group">
+					<span class="input-group-addon"><i class="fa fa-lock"></i></span>
+					<input type="password" class="form-control" id="password" placeholder="Password" pattern=".{4,}"></input>
+					<a class="input-group-addon" href="" style="background:none; border-left:none;"><i class="fa fa-question"></i></a>
+					<span id="p2" class=""></span>
+				</div>
 			</div>			
 			
 			<button ID="submit" class="btn btn-default">Submit</button>&nbsp;&nbsp;
-			<input type="checkbox" id="Check01" title="Remember Me"></input>
 
 		</div>
 			
