@@ -38,32 +38,11 @@
 	
 	<script>
 
-		var u = 0;
-		var p = 0;
-
-		$("#username").keyup(function(){
-		
-			if($("#username")[0].checkValidity()==true || username.value != "" || username.value != null){
-				u = 1;
-			} else{
-				u = 0;
-			}
-		});
-
-		$("#password").keyup(function(){
-			
-			if($("#password")[0].checkValidity()==true){
-				p = 1;
-			} else{
-				p = 0;
-			}
-		});
-
 		$("#submit").click(function(){
-			var check = u + p; alert(check);
-			if(check != 2){
+		
+			if($("#username")[0].checkValidity()==false || $("#password")[0].checkValidity()==false){
 				
-				if(u!=1){
+				if($("#username")[0].checkValidity()==false){
 					$("#u1").addClass("has-error has-feedback");
 					$("#u2").addClass("glyphicon glyphicon-remove form-control-feedback");
 				} else{
@@ -71,7 +50,7 @@
 					$("#u2").removeClass("glyphicon glyphicon-remove form-control-feedback");
 				}
 				
-				if(p!=1){
+				if($("#password")[0].checkValidity()==false){
 					$("#p1").addClass("has-error has-feedback");
 					$("#p2").addClass("glyphicon glyphicon-remove form-control-feedback");
 				} else{
