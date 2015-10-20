@@ -42,8 +42,8 @@
 		var p = 0;
 
 		$("#username").keyup(function(){
-			var username = document.getElementById("username");
-			if(username.checkValidity()==true){
+		
+			if($("#username")[0].checkValidity()==true || username.value != "" || username.value != null){
 				u = 1;
 			} else{
 				u = 0;
@@ -51,8 +51,8 @@
 		});
 
 		$("#password").keyup(function(){
-			var password = document.getElementById("password");
-			if(password.checkValidity()==true){
+			
+			if($("#password")[0].checkValidity()==true){
 				p = 1;
 			} else{
 				p = 0;
@@ -60,9 +60,9 @@
 		});
 
 		$("#submit").click(function(){
-			var check = u + p;
+			var check = u + p; alert(check);
 			if(check != 2){
-
+				
 				if(u!=1){
 					$("#u1").addClass("has-error has-feedback");
 					$("#u2").addClass("glyphicon glyphicon-remove form-control-feedback");
@@ -78,16 +78,16 @@
 					$("#p1").removeClass("has-error has-feedback");
 					$("#p2").removeClass("glyphicon glyphicon-remove form-control-feedback");
 				}
-
+			
 			} else{
 				
 				$("#u1").removeClass("has-error has-feedback");
 				$("#u2").removeClass("glyphicon glyphicon-remove form-control-feedback");
-					
+				
 				$("#p1").removeClass("has-error has-feedback");
 				$("#p2").removeClass("glyphicon glyphicon-remove form-control-feedback");
-					
-				alert("submit");				
+				
+				alert("submit");
 				
 			}
 			
