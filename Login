@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<head lang="en">
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
+	<style>
+	</style>
+
+</head>
+
+<body>
+	
+	<div class="row">
+		<div class="col-sm-3">
+			<input type="text" class="form-control" id="username" pattern=".{4,}" autofocus></input>
+			<input type="password" class="form-control" id="password" pattern=".{4,}"></input>
+			<button ID="submit" class="btn btn-default">Submit</button>&nbsp;&nbsp;
+			<input type="checkbox" id="Check01" title="Remember Me"></input>
+		</div>
+	</div>
+		
+	<script>
+
+		var u = 0;
+		var p = 0;
+
+		$("#username").keyup(function(){
+			var username = document.getElementById("username");
+			if(username.checkValidity()==true){
+				u = 1;
+			} else{
+				u = 0;
+			}
+		});
+
+		$("#password").keyup(function(){
+			var password = document.getElementById("password");
+			if(password.checkValidity()==true){
+				p = 1;
+			} else{
+				p = 0;
+			}
+		});
+
+		$("#submit").click(function(){
+			var check = u + p;
+			if(check != 2){
+
+				if(u!=1){
+					$("#username").css("border-color", "red");
+				} else{
+					$("#username").css("border-color", "");
+				}
+				
+				if(p!=1){
+					$("#password").css("border-color", "red");
+				} else{
+					$("#password").css("border-color", "");
+				}
+
+			} else{
+				
+				$("#username").css("border-color", "");
+				$("#password").css("border-color", "");
+				alert("submit");				
+				
+			}
+		});
+
+	</script>
+
+</body>
+</html>
